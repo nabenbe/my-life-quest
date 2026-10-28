@@ -1,0 +1,23 @@
+{
+  "name": "MY LIFE QUEST - 人生冒険RPG",
+  "short_name": "LIFE QUEST",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#091b50",
+  "theme_color": "#142c9a",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
