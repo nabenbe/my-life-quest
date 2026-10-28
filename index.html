@@ -32,10 +32,11 @@ main>.tab-intro{font-size:13px;color:#c8bde1;margin:12px 0 8px}
 .rpg-bottom a{font-size:11px!important;padding:8px 2px!important;min-width:0!important}
 .rpg-bottom a.active{background:#59418a!important;color:#fff!important}
 body{overflow-x:hidden}
+.habit-sprite{width:62px;flex-shrink:0}.habit-sprite svg{width:58px;height:74px;image-rendering:pixelated}.quest-delete{font-size:11px;padding:7px 8px;min-height:34px}.task>div:first-child{flex:1;min-width:0}.habit-status{justify-content:flex-start;padding-left:18px}
 </style></head><body><main>
-<p class="sub">MY LIFE QUEST · 9.2</p><h1>⚔ MY LIFE QUEST</h1><p class="sub">家族との時間を大切に。仕事も学びも、すべてが冒険になる。</p>
+<p class="sub">MY LIFE QUEST · 9.4</p><h1>⚔ MY LIFE QUEST</h1><p class="sub">家族との時間を大切に。仕事も学びも、すべてが冒険になる。</p>
 <section class="card"><div class="top"><div><div class="muted">現在の称号</div><b id="title">人生の探究者</b></div><div class="level" id="level">Lv.1</div></div><div class="bar"><div class="fill" id="progress"></div></div><div class="sub" id="xp"></div><div class="notice" id="notice" role="status"></div></section>
-<section class="card"><h2>🧙 転職ギルド · 12の職業</h2><p class="hint">現実の活動で職業経験値を獲得。職業はいつでも変更でき、経験値はすべて保持されます。複数の職業を同時に育てられます。</p><div class="careerhero" id="activeCareer"></div><div class="jobs" id="jobs"></div></section><section class="card"><h2>📜 職業ごとの称号</h2><p class="hint">Lv.2・5・10・20で職業の称号が進化します。</p><div id="careerTitles" class="tree"></div></section><section class="card hero"><div class="questlabel">⚔️ ADVENTURER STATUS</div><div class="pixel">🧙‍♂️</div><p style="text-align:center;color:#ffdf86;font-weight:800">今日も自分の物語を進めよう</p><p style="text-align:center;font-size:12px">クエストを進めて、新しいエリアを解放しよう</p></section><section class="card"><h2>🗺️ 冒険マップ</h2><p class="hint">人生全体のレベルが上がると新しいエリアが開きます。すべての活動が冒険の一歩です。</p><div class="world" id="world"></div></section><section class="card"><h2>🐉 ボスバトル</h2><p class="hint">クエストを達成するとボスにダメージ！ ボスを倒すと宝箱を獲得。負けや期限はありません。</p><div class="battle"><div class="top"><b id="bossName">霧の番人</b><span id="bossStage" class="small"></span></div><div class="enemy" id="bossEmoji">👾</div><div class="hp"><div id="bossHP" style="width:100%"></div></div><p class="small" id="bossText"></p><div class="buttons"><button id="claimBoss" type="button" style="display:none">🏆 討伐報酬を受け取る</button></div></div></section><section class="card"><h2>🎁 宝箱と装備</h2><div class="loot"><div class="top"><div><b>🧰 宝箱 <span id="chests">0</span> 個</b><div class="small">ボス討伐で獲得。中身はランダムな装備です。</div></div><button id="openChest" type="button">宝箱を開ける</button></div><p class="small" id="lootMessage" role="status"></p></div><h3 style="font-size:15px">🎒 所持装備</h3><p class="hint">装備は見た目と称号を楽しむためのもの。経験値倍率は変わりません。</p><div id="equipment" class="equip"></div></section><section class="card"><h2>✨ 成長する11の能力</h2><div class="grid" id="skills"></div></section>
+<section class="card"><h2>🧙 転職ギルド · 13の職業</h2><p class="hint">現実の活動で職業経験値を獲得。職業はいつでも変更でき、経験値はすべて保持されます。複数の職業を同時に育てられます。</p><div class="careerhero" id="activeCareer"></div><div class="jobs" id="jobs"></div></section><section class="card"><h2>📜 職業ごとの称号</h2><p class="hint">Lv.2・5・10・20で職業の称号が進化します。</p><div id="careerTitles" class="tree"></div></section><section class="card hero"><div class="questlabel">⚔️ ADVENTURER STATUS</div><div class="pixel">🧙‍♂️</div><p style="text-align:center;color:#ffdf86;font-weight:800">今日も自分の物語を進めよう</p><p style="text-align:center;font-size:12px">クエストを進めて、新しいエリアを解放しよう</p></section><section class="card"><h2>🗺️ 冒険マップ</h2><p class="hint">人生全体のレベルが上がると新しいエリアが開きます。すべての活動が冒険の一歩です。</p><div class="world" id="world"></div></section><section class="card"><h2>🐉 ボスバトル</h2><p class="hint">クエストを達成するとボスにダメージ！ ボスを倒すと宝箱を獲得。負けや期限はありません。</p><div class="battle"><div class="top"><b id="bossName">霧の番人</b><span id="bossStage" class="small"></span></div><div class="enemy" id="bossEmoji">👾</div><div class="hp"><div id="bossHP" style="width:100%"></div></div><p class="small" id="bossText"></p><div class="buttons"><button id="claimBoss" type="button" style="display:none">🏆 討伐報酬を受け取る</button></div></div></section><section class="card"><h2>🎁 宝箱と装備</h2><div class="loot"><div class="top"><div><b>🧰 宝箱 <span id="chests">0</span> 個</b><div class="small">ボス討伐で獲得。中身はランダムな装備です。</div></div><button id="openChest" type="button">宝箱を開ける</button></div><p class="small" id="lootMessage" role="status"></p></div><h3 style="font-size:15px">🎒 所持装備</h3><p class="hint">装備は見た目と称号を楽しむためのもの。経験値倍率は変わりません。</p><div id="equipment" class="equip"></div></section><section class="card"><h2>✨ 成長する11の能力</h2><div class="grid" id="skills"></div></section>
 <section class="card"><h2>🌳 スキルツリー</h2><p class="section-note">各能力のレベルに応じて称号が解放されます。未解放の目標も表示します。</p><div class="tree" id="tree"></div></section>
 <section class="card"><h2>🏅 獲得した実績</h2><div id="badges"></div></section>
 <section class="card"><h2>⏱️ 集中時間を経験値に</h2><p class="hint">勉強・読書・資料作成など、集中した時間を記録。10分につき10 XP（端数は切り捨て）。特別ボーナスも適用できます。タイマーは画面を開いている間だけ動きます。</p><div class="fields"><div class="wide"><label for="timedTask">何に集中する？</label><select id="timedTask"></select></div><div><label for="minutes">記録する時間（分）</label><input id="minutes" type="number" min="1" max="600" value="30"></div><div><label>ストップウォッチ</label><div id="timer">00:00</div></div><div class="wide buttons"><button id="startTimer" type="button">▶ 開始</button><button class="secondary" id="stopTimer" type="button">⏸ 停止</button><button class="secondary" id="useTimer" type="button">計測時間を入力</button><button id="recordTime" type="button">時間を記録してXP獲得</button></div></div></section>
@@ -50,18 +51,19 @@ const base=[
 ['本を読む','learn',20,'time'],['資格・専門分野を勉強する','learn',20,'time'],['集中作業に取り組む','focus',20,'time'],['ITやAIを学ぶ','it',20,'time'],['ITの仕組みを改善する','it',40,'action'],['仕事の資料を作成する','practice',40,'action'],['実務の仕事を1つ完了する','practice',20,'action'],['リハビリの支援・指導を行う','rehab',30,'action'],['研修会に参加する','rehab',40,'action'],['人生研究所に記録する','create',30,'action'],['文章・エッセイを書く','create',20,'time'],['家族と旅行・お出かけする','family',60,'action'],['子どもとゲームを楽しむ','family',20,'action'],['家族とゆっくり過ごす','family',20,'action'],['運動する','health',20,'time'],['意識して休息をとる','health',20,'action']
 ];
 const careers=[
-['regional','🛡️','地域の守護者','地域事業・介護予防・地域会議','community','まちの案内人','地域の支援者','地域の守護者','まちの伝説'],
-['rehab','⚕️','癒やしの賢者','デイサービス・運動指導・リハビリ','rehab','見習い療法士','癒やし手','癒やしの賢者','生命の守護者'],
-['it','🧙','魔導技師','IT・AI・クエスタップ関連業務','it','コードの弟子','仕組みの職人','魔導技師','自動化の大賢者'],
-['business','⚔️','独立の開拓者','自費事業・企画・顧客対応','practice','商いの旅人','事業の開拓者','独立の開拓者','未来の創業王'],
-['coffee','☕','焙煎の錬金術師','焙煎・抽出・販売・コーヒー研究','coffee','豆の見習い','焙煎職人','焙煎の錬金術師','珈琲の大賢者'],
-['writer','✒️','物語の紡ぎ手','note・ブログ・エッセイ・人生研究所','create','言葉の旅人','記録の書き手','物語の紡ぎ手','人生の語り部'],
-['scholar','📚','知識の賢者','読書・勉強・研修参加','learn','本の探検家','学びの研究者','知識の賢者','万象の博識者'],
-['focus','⏳','集中の騎士','集中作業・習慣づくり','focus','集中の見習い','時間の使い手','集中の騎士','時の達人'],
-['family','🏡','絆の勇者','子どもとの遊び・家族旅行・団らん','family','絆の旅人','家族の冒険者','絆の勇者','思い出の守護神'],
-['mountain','🥾','山岳の探検家','登山・ハイキング・自然体験','outdoor','森の散歩人','山道の冒険者','山岳の探検家','峰々の覇者'],
-['photo','📷','光の記録者','カメラ・撮影・写真整理','outdoor','光の見習い','風景の観察者','光の記録者','一瞬の芸術家'],
-['wellness','🌿','調和の守り手','運動・睡眠・休息・心身の回復','health','休息の旅人','健康の支援者','調和の守り手','生命の調律師']
+['regional','🛡️','地域守護騎士','地域事業・介護予防・地域会議','community','まちの案内人','地域の支援者','地域の守護者','まちの伝説'],
+['rehab','⚕️','リハビリ賢者','デイサービス・運動指導・リハビリ','rehab','見習い療法士','癒やし手','癒やしの賢者','生命の守護者'],
+['it','🧙','IT魔導師','IT・AI・クエスタップ関連業務','it','コードの弟子','仕組みの職人','IT魔導師','自動化の大賢者'],
+['business','⚔️','事業開拓者','自費事業・企画・顧客対応','practice','商いの旅人','事業の開拓者','独立の開拓者','未来の創業王'],
+['coffee','☕','コーヒー錬金術師','焙煎・抽出・販売・コーヒー研究','coffee','豆の見習い','焙煎職人','焙煎の錬金術師','珈琲の大賢者'],
+['writer','✒️','文章の吟遊詩人','note・ブログ・エッセイ・人生研究所','create','言葉の旅人','記録の書き手','物語の紡ぎ手','人生の語り部'],
+['scholar','📚','読書賢者','読書・勉強・研修参加','learn','本の探検家','学びの研究者','知識の賢者','万象の博識者'],
+['focus','⏳','集中騎士','集中作業・習慣づくり','focus','集中の見習い','時間の使い手','集中の騎士','時の達人'],
+['family','🏡','家族の勇者','子どもとの遊び・家族旅行・団らん','family','絆の旅人','家族の冒険者','絆の勇者','思い出の守護神'],
+['mountain','🥾','山岳探検家','登山・ハイキング・自然体験','outdoor','森の散歩人','山道の冒険者','山岳の探検家','峰々の覇者'],
+['photo','📷','写真魔術師','カメラ・撮影・写真整理','outdoor','光の見習い','風景の観察者','光の記録者','一瞬の芸術家'],
+['manager','💼','経営者','経営の学習・事業運営・意思決定','practice','経営の見習い','事業を育てる人','経営戦略家','未来の経営者'],
+['wellness','🌿','健康の守護者','運動・睡眠・休息・心身の回復','health','休息の旅人','健康の支援者','調和の守り手','生命の調律師']
 ];
 const extraQuests=[
 ['地域の介護予防教室を担当','community',40,'action','regional'],['地域会議・地域包括との打ち合わせ','community',35,'action','regional'],['地域事業の報告書を作成','practice',35,'action','regional'],
@@ -84,6 +86,7 @@ if(!state.tasks.some(t=>t.job&&careers.some(c=>c[0]===t.job))){const existing=ne
 const inferredJob={learn:'scholar',focus:'focus',it:'it',practice:'business',rehab:'rehab',create:'writer',family:'family',health:'wellness',community:'regional',coffee:'coffee',outdoor:'mountain'};
 state.tasks.forEach(t=>{if(!t.job)t.job=inferredJob[t.cat]||'business'});
 state.log.forEach(l=>{if(!l.job)l.job=inferredJob[l.cat]||'business'});
+const habitsListNames=['ジャーナリング','コーヒー事業をすすめる','読書','ブログ記載（もやもやを吐き出す）','筋トレ・散歩','作業療法士勉強','家族との時間を楽しむ','自分のために休む'];
 let questFilter='all';
 function careerXP(id){return state.log.reduce((n,l)=>n+(l.job===id?(Number(l.xp)||0):0),0)}
 function careerTitle(c){let n=lv(careerXP(c[0]));return n>=20?c[9]:n>=10?c[8]:n>=5?c[7]:n>=2?c[6]:c[5]}
@@ -92,11 +95,11 @@ careers.forEach(c=>{let xp=careerXP(c[0]),div=document.createElement('div');div.
 el('careerTitles').replaceChildren();careers.forEach(c=>{let div=document.createElement('div');div.className='node '+(careerXP(c[0])>=100?'unlocked':'locked');let b=document.createElement('b');b.textContent=c[1]+' '+careerTitle(c);let small=document.createElement('small');let xp=careerXP(c[0]);let next=[2,5,10,20].find(n=>lv(xp)<n);small.textContent=next?'次の称号 Lv.'+next+'まで '+Math.max(0,(next-1)*100-xp)+' XP':'最高称号を獲得！';div.append(b,small);el('careerTitles').append(div)})}
 if(!state.rpg||typeof state.rpg!=='object')state.rpg={stage:1,damage:0,chests:0,inventory:[],equipped:null};
 const gear=[['🪵','旅人の杖'],['🧥','冒険者のマント'],['🗡️','挑戦の剣'],['📚','知恵の書'],['🛡️','勇気の盾'],['👑','探究者の冠'],['💎','成長の宝珠'],['🧭','人生の羅針盤']];
-const areas=[['🌾','はじまりの草原',1],['📚','学びの森',3],['💻','創造の塔',6],['🏔️','挑戦の山',10],['🏡','絆の港',15],['🌌','人生研究の星空',20]];
+const areas=[['🌾','はじまりの草原',1],['📚','学びの森',3],['💻','創造の塔',6],['🏔️','挑戦の山',10],['🏡','絆の港',15],['🌌','人生研究の星空',20],['🏰','冒険者の城',30],['🌲','深緑の大森林',50],['🗻','雲上の峰',75],['🧪','錬金術の研究所',100],['🌊','星降る海',150],['🧙','魔法都市',200],['🐉','竜の谷',300],['🌋','炎の大陸',500],['🌙','月影の王国',750],['☀️','太陽の神殿',1000],['🪐','星間の回廊',1500],['🏯','天空の帝国',2000],['🌌','銀河の果て',3000],['👑','伝説の聖域',4000],['✨','人生の大宇宙',5000]];
 const el=id=>document.getElementById(id),catName=id=>cats.find(c=>c[0]===id)?.[2]||'その他';
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){alert('保存できませんでした。バックアップを取ってください。')}}
 function total(cat){return state.log.reduce((s,l)=>s+(!cat||l.cat===cat?Number(l.xp)||0:0),0)}
-function lv(x){return Math.floor(x/100)+1}
+function lv(x){return Math.min(99999,Math.floor(x/100)+1)}
 function addLog(name,cat,xp,mins,job){job=job||inferredJob[cat]||state.career;let checks=[...document.querySelectorAll('.bonuscheck:checked')];let bonus=Math.min(100,checks.reduce((a,b)=>a+Number(b.value),0));let tags=checks.map(x=>x.dataset.name);let memo=el('reflection').value.trim().slice(0,1000);xp+=bonus;state.rpg.damage+=Math.max(1,Math.ceil(xp/10));checks.forEach(x=>x.checked=false);el('reflection').value='';let before=lv(total()),oldSkill=lv(total(cat));state.log.unshift({id:Date.now()+Math.random(),name,cat,job,xp,bonus,tags,memo,time:new Date().toISOString(),...(mins?{minutes:mins}:{})});save();render();el('notice').style.display='block';el('notice').textContent=lv(total())>before?'🎉 人生レベルアップ！ Lv.'+lv(total())+' に到達！':lv(total(cat))>oldSkill?'🌟 '+catName(cat)+' が Lv.'+lv(total(cat))+' にアップ！':'✨ '+name+'：+'+xp+' XP 獲得！'}
 const milestones=[{level:2,label:'見習い'},{level:5,label:'実践者'},{level:10,label:'専門家'},{level:20,label:'達人'}];
 const achievements=[{label:'はじめの一歩',ok:()=>state.log.length>=1,desc:'最初の行動を記録'},{label:'読書家',ok:()=>total('learn')>=300,desc:'学習300 XP'},{label:'集中の達人',ok:()=>total('focus')>=500,desc:'集中500 XP'},{label:'改善の職人',ok:()=>total('it')>=500,desc:'IT500 XP'},{label:'人生の記録者',ok:()=>state.log.filter(x=>x.cat==='create').length>=10,desc:'人生研究・表現10回'},{label:'家族との冒険者',ok:()=>state.log.filter(x=>x.cat==='family').length>=10,desc:'家族との体験10回'},{label:'バランスの探究者',ok:()=>cats.every(c=>total(c[0])>0),desc:'すべての能力を記録'}];
@@ -105,7 +108,7 @@ function render(){let x=total();renderRPG();renderCareers();el('level').textCont
 el('tree').replaceChildren();cats.forEach(c=>{let xp=total(c[0]),level=lv(xp);milestones.forEach(m=>{let node=document.createElement('div');node.className='node '+(level>=m.level?'unlocked':'locked');let name=document.createElement('b');name.textContent=(level>=m.level?'🔓 ':'🔒 ')+c[1]+' '+m.label;let note=document.createElement('small');note.textContent=c[2]+' · 必要 Lv.'+m.level+(level>=m.level?' · 解放済み':' · あと '+Math.max(0,(m.level-1)*100-xp)+' XP');node.append(name,note);el('tree').append(node)})});el('badges').replaceChildren();achievements.forEach(a=>{let b=document.createElement('span');b.className='pill '+(a.ok()?'got':'');b.textContent=(a.ok()?'🏅 ':'🔒 ')+a.label;b.title=a.desc;el('badges').append(b)});
 let selected=el('timedTask').value;el('timedTask').replaceChildren();state.tasks.filter(t=>t.mode==='time').forEach(t=>{let o=new Option(t.name+' · '+(careers.find(c=>c[0]===t.job)?.[2]||catName(t.cat)),String(t.id));el('timedTask').add(o)});if([...el('timedTask').options].some(o=>o.value===selected))el('timedTask').value=selected;
 el('questFilters').replaceChildren();[['all','すべて'],...careers.map(c=>[c[0],c[1]+' '+c[2]])].forEach(f=>{let b=document.createElement('button');b.className=questFilter===f[0]?'chosen':'secondary';b.textContent=f[1];b.onclick=()=>{questFilter=f[0];render()};el('questFilters').append(b)});
-el('tasks').replaceChildren();state.tasks.filter(t=>t.mode!=='time'&&(questFilter==='all'||t.job===questFilter)).sort((a,b)=>Number(b.job==='family')-Number(a.job==='family')).forEach(t=>{let row=document.createElement('div');row.className='task';let desc=document.createElement('div');let name=document.createElement('span');name.textContent=t.name;let meta=document.createElement('small');meta.textContent=(careers.find(c=>c[0]===t.job)?.[2]||catName(t.cat))+' · +'+t.xp+' XP';desc.append(name,meta);let btn=document.createElement('button');btn.textContent='達成！';btn.onclick=()=>addLog(t.name,t.cat,t.xp,undefined,t.job);row.append(desc,btn);el('tasks').append(row)});
+el('tasks').replaceChildren();state.tasks.filter(t=>(questFilter==='all'||t.job===questFilter)).sort((a,b)=>Number(b.job==='family')-Number(a.job==='family')).forEach(t=>{let row=document.createElement('div');row.className='task';let desc=document.createElement('div');let name=document.createElement('span');name.textContent=t.name;let meta=document.createElement('small');meta.textContent=(careers.find(c=>c[0]===t.job)?.[2]||catName(t.cat))+' · +'+t.xp+' XP';desc.append(name,meta);let btn=document.createElement('button');btn.textContent=t.mode==='time'?'⏱ 集中へ':'達成！';btn.onclick=()=>{if(t.mode==='time'){const sel=el('timedTask');sel.value=String(t.id);document.querySelector('.rpg-bottom a[data-tab="focus"]')?.click()}else addLog(t.name,t.cat,t.xp,undefined,t.job)};const del=document.createElement('button');del.className='danger quest-delete';del.textContent='削除';del.setAttribute('aria-label',t.name+'を削除');del.onclick=()=>{if(!confirm('「'+t.name+'」をクエスト一覧から削除しますか？\n過去の経験値・記録は残ります。'))return;state.tasks=state.tasks.filter(x=>x.id!==t.id);if(habitsListNames.includes(t.name)){state.deletedHabits=state.deletedHabits||[];if(!state.deletedHabits.includes(t.name))state.deletedHabits.push(t.name)}save();render()};row.append(desc,btn,del);el('tasks').append(row)});
 el('history').replaceChildren();if(!state.log.length)el('history').textContent='まだ記録がありません。';state.log.slice(0,30).forEach(l=>{let row=document.createElement('div');row.className='log';let span=document.createElement('span');span.textContent=new Date(l.time).toLocaleString('ja-JP')+' · '+l.name+(l.minutes?' ('+l.minutes+'分)':'')+' · '+(careers.find(c=>c[0]===l.job)?.[2]||catName(l.cat))+' · +'+l.xp+' XP'+(l.tags?.length?' ['+l.tags.join('・')+']':'')+(l.memo?' ／ '+l.memo:'');let undo=document.createElement('button');undo.className='danger';undo.textContent='取消';undo.onclick=()=>{if(confirm('この記録を取り消しますか？')){state.log=state.log.filter(x=>x.id!==l.id);state.rpg.damage=Math.max(0,state.rpg.damage-Math.max(1,Math.ceil(Number(l.xp)/10)));save();render()}};row.append(span,undo);el('history').append(row)})}
 cats.forEach(c=>el('category').add(new Option(c[1]+' '+c[2],c[0])));careers.forEach(c=>el('jobCategory').add(new Option(c[1]+' '+c[2],c[0])));
 el('form').onsubmit=e=>{e.preventDefault();let name=el('name').value.trim();if(!name)return;state.tasks.push({id:Date.now()+Math.random(),name,cat:el('category').value,xp:Number(el('points').value),mode:'action',job:el('jobCategory').value});save();render();e.target.reset()};
@@ -120,6 +123,7 @@ if(!state.tasks.some(t=>t.job&&careers.some(c=>c[0]===t.job))){const existing=ne
 const inferredJob={learn:'scholar',focus:'focus',it:'it',practice:'business',rehab:'rehab',create:'writer',family:'family',health:'wellness',community:'regional',coffee:'coffee',outdoor:'mountain'};
 state.tasks.forEach(t=>{if(!t.job)t.job=inferredJob[t.cat]||'business'});
 state.log.forEach(l=>{if(!l.job)l.job=inferredJob[l.cat]||'business'});
+const habitsListNames=['ジャーナリング','コーヒー事業をすすめる','読書','ブログ記載（もやもやを吐き出す）','筋トレ・散歩','作業療法士勉強','家族との時間を楽しむ','自分のために休む'];
 let questFilter='all';
 function careerXP(id){return state.log.reduce((n,l)=>n+(l.job===id?(Number(l.xp)||0):0),0)}
 function careerTitle(c){let n=lv(careerXP(c[0]));return n>=20?c[9]:n>=10?c[8]:n>=5?c[7]:n>=2?c[6]:c[5]}
@@ -132,18 +136,18 @@ function pixelHero(){
  const r=state.rpg||{},item=gear[r.inventory?.[r.equipped]]||null;
  const kind=item?item[1]:'';
  const cape=kind.includes('マント'),sword=kind.includes('剣'),crown=kind.includes('冠'),shield=kind.includes('盾'),staff=kind.includes('杖'),book=kind.includes('書');
- const job=state.career;const robe=['it','writer','scholar','coffee'].includes(job);
+ const job=state.career;const robe=['it','writer','scholar','coffee'].includes(job);const business=job==='manager'||(state.costume==='suit');const heroTier=lv(total())>=5000?5:lv(total())>=1000?4:lv(total())>=500?3:lv(total())>=100?2:lv(total())>=50?1:0;
  const blocks=[];function rect(x,y,w,h,c){blocks.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`)}
  // pixel coordinates on a 16x20 grid, each cell 5px
  const px=(x,y,w,h,c)=>rect(x*5,y*5,w*5,h*5,c);
  px(4,1,8,2,'#33283b');px(3,3,10,5,'#3c2c37');px(4,4,8,5,'#f2b78d');px(5,6,2,1,'#202637');px(9,6,2,1,'#202637');px(7,8,2,1,'#b76561');px(3,3,10,2,'#3a2c36');px(4,2,8,1,'#56403d');
  if(cape){px(2,9,12,9,'#923f62')}
- px(4,9,8,7,robe?'#684da3':'#336ba1');px(6,9,4,3,robe?'#b9a2e5':'#9ec8e9');px(3,10,2,6,'#f0b38a');px(11,10,2,6,'#f0b38a');px(5,13,6,2,'#d4b16e');px(4,16,3,3,'#3a405b');px(9,16,3,3,'#3a405b');px(3,18,4,2,'#201f35');px(9,18,4,2,'#201f35');
- if(crown){px(4,0,8,2,'#e5bd52');px(4,0,2,1,'#f7e98d');px(10,0,2,1,'#f7e98d');px(7,1,2,1,'#cc4f69')}
+ px(4,9,8,7,business?'#27354d':robe?'#684da3':heroTier>=2?'#ae803f':'#336ba1');px(6,9,4,3,business?'#f4f0e8':robe?'#b9a2e5':'#9ec8e9');if(business){px(7,10,2,4,'#b04a61');px(4,9,2,6,'#354c70');px(10,9,2,6,'#354c70')}px(3,10,2,6,'#f0b38a');px(11,10,2,6,'#f0b38a');px(5,13,6,2,'#d4b16e');px(4,16,3,3,'#3a405b');px(9,16,3,3,'#3a405b');px(3,18,4,2,'#201f35');px(9,18,4,2,'#201f35');
+ if(heroTier>=1&&!business){px(3,9,1,6,'#dfc36d');px(12,9,1,6,'#dfc36d')}if(heroTier>=2&&!business){px(7,11,2,2,'#63dbd4')}if(heroTier>=3){px(2,7,1,2,'#e9d37b');px(13,7,1,2,'#e9d37b')}if(heroTier>=4){px(2,2,2,1,'#b8ecff');px(12,2,2,1,'#b8ecff')}if(heroTier>=5){px(1,1,2,2,'#f3d477');px(13,1,2,2,'#f3d477')}if(crown){px(4,0,8,2,'#e5bd52');px(4,0,2,1,'#f7e98d');px(10,0,2,1,'#f7e98d');px(7,1,2,1,'#cc4f69')}
  if(sword){px(13,7,1,10,'#e8e9e4');px(12,12,3,1,'#d7b75f');px(13,17,1,2,'#513d2b')}
  if(shield){px(0,11,4,6,'#d5b66c');px(1,12,2,4,'#496da4')}
  if(staff){px(13,6,1,13,'#987148');px(12,5,3,2,'#7fd8d3')}
- if(book){px(0,12,4,4,'#e7d7ad');px(2,12,1,4,'#765b94')}
+ if(book){px(0,12,4,4,'#e7d7ad');px(2,12,1,4,'#765b94')}if(job==='manager'){px(0,12,3,5,'#93673d');px(0,12,3,1,'#c69b59')}if(job==='it'){px(0,12,4,3,'#8ecdd8');px(0,15,4,1,'#3d4c6e')}if(job==='rehab'){px(5,10,1,4,'#f6f6f2');px(10,10,1,4,'#f6f6f2')}
  return `<svg viewBox="0 0 80 105" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="装備が変わる2Dドット絵の主人公" shape-rendering="crispEdges">${blocks.join('')}</svg>`;
 }
 function updateHero(){let r=state.rpg||{},current=careers.find(c=>c[0]===state.career)||careers[0],item=gear[r.inventory?.[r.equipped]];
@@ -183,7 +187,7 @@ const habits=[
 {name:'家族との時間を楽しむ',icon:'🏡',desc:'大切な人と過ごす時間も冒険の成果',cat:'family',job:'family',xp:25},
 {name:'自分のために休む',icon:'🌙',desc:'休むことも未来への準備',cat:'health',job:'wellness',xp:15}
 ];
-for(const [i,h] of habits.entries())if(!state.tasks.some(t=>t.name===h.name))state.tasks.push({id:90000+i,name:h.name,cat:h.cat,job:h.job,xp:h.xp,mode:'action'});
+for(const [i,h] of habits.entries())if(!(state.deletedHabits||[]).includes(h.name)&&!state.tasks.some(t=>t.name===h.name))state.tasks.push({id:90000+i,name:h.name,cat:h.cat,job:h.job,xp:h.xp,mode:'action'});
 save();
 const main=document.querySelector('main'),quest=document.getElementById('quests');if(!main||!quest)return;
 const panel=document.createElement('section');panel.className='habit-panel';panel.id='dailyHabits';
@@ -195,19 +199,61 @@ const dateAt=(n)=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()
 const logged=(name,date)=>state.log.some(l=>l.name===name&&localDay(new Date(l.time))===date);
 function paint(){
 const selected=dateAt(dayOffset),day=localDay(selected),today=localDay(new Date());
-const done=habits.filter(h=>logged(h.name,day)).length;
+const visibleHabits=habits.filter(h=>state.tasks.some(t=>t.name===h.name));const done=visibleHabits.filter(h=>logged(h.name,day)).length;
 panel.replaceChildren();
-const status=document.createElement('div');status.className='habit-status';status.innerHTML='<strong>👑 Lv.'+lv(total())+'</strong><strong>❤️ 20/20</strong><strong>💎 '+(state.rpg?.chests||0)+'</strong>';panel.append(status);
-const summary=document.createElement('div');summary.className='habit-summary';summary.innerHTML='<div class="habit-sprite">🧙🏻</div><div style="flex:1"><b>経験値　'+(total()%100)+' / 100</b><div class="bar"><div class="fill" style="width:'+(total()%100)+'%"></div></div><b>選択日の習慣　'+done+' / '+habits.length+'</b><div class="bar"><div class="fill" style="width:'+(done/habits.length*100)+'%"></div></div></div>';panel.append(summary);
+const status=document.createElement('div');status.className='habit-status';status.innerHTML='<strong>👑 Lv.'+lv(total()).toLocaleString('ja-JP')+'</strong>';panel.append(status);
+const summary=document.createElement('div');summary.className='habit-summary';summary.innerHTML='<div class="habit-sprite" aria-label="冒険者アバター">'+pixelHero()+'</div><div style="flex:1"><b>経験値　'+(total()%100)+' / 100</b><div class="bar"><div class="fill" style="width:'+(total()%100)+'%"></div></div><b>選択日の習慣　'+done+' / '+visibleHabits.length+'</b><div class="bar"><div class="fill" style="width:'+(visibleHabits.length?done/visibleHabits.length*100:0)+'%"></div></div></div>';panel.append(summary);
 const week=document.createElement('div');week.className='habit-week';const days=['日','月','火','水','木','金','土'];for(let i=-6;i<=0;i++){const d=dateAt(i),btn=document.createElement('button');btn.className='habit-day'+(i===dayOffset?' active':'');btn.innerHTML=days[d.getDay()]+'<b>'+d.getDate()+'</b>';btn.onclick=()=>{dayOffset=i;paint()};week.append(btn)}panel.append(week);
 const heading=document.createElement('h2');heading.className='habit-head';heading.textContent=(day===today?'今日':(selected.getMonth()+1)+'月'+selected.getDate()+'日')+'の習慣';panel.append(heading);
-const list=document.createElement('div');list.className='habit-list';for(const h of habits){const done=logged(h.name,day),row=document.createElement('div');row.className='habit-item'+(done?' done':'');const ico=document.createElement('span');ico.className='habit-emoji';ico.textContent=h.icon;const info=document.createElement('div');info.className='habit-content';const b=document.createElement('b');b.textContent=h.name;const small=document.createElement('small');small.textContent=h.desc+' · +'+h.xp+' XP';info.append(b,small);const btn=document.createElement('button');btn.className='habit-check'+(done?' checked':'');btn.textContent=done?'✓':'';btn.setAttribute('aria-label',h.name+(done?' 達成済み':' 達成する'));btn.disabled=day!==today||done;btn.onclick=()=>{if(logged(h.name,today))return;addLog(h.name,h.cat,h.xp,undefined,h.job);paint()};row.append(ico,info,btn);list.append(row)}panel.append(list);
+const list=document.createElement('div');list.className='habit-list';for(const h of visibleHabits){const done=logged(h.name,day),row=document.createElement('div');row.className='habit-item'+(done?' done':'');const ico=document.createElement('span');ico.className='habit-emoji';ico.textContent=h.icon;const info=document.createElement('div');info.className='habit-content';const b=document.createElement('b');b.textContent=h.name;const small=document.createElement('small');small.textContent=h.desc+' · +'+h.xp+' XP';info.append(b,small);const btn=document.createElement('button');btn.className='habit-check'+(done?' checked':'');btn.textContent=done?'✓':'';btn.setAttribute('aria-label',h.name+(done?' 達成済み':' 達成する'));btn.disabled=day!==today||done;btn.onclick=()=>{if(logged(h.name,today))return;addLog(h.name,h.cat,h.xp,undefined,h.job);paint()};row.append(ico,info,btn);list.append(row)}panel.append(list);
 const note=document.createElement('p');note.className='habit-note';note.textContent='チェックは当日1回のみ。過去の日付は振り返り用です。すべて達成しなくてもペナルティはありません。家族や休息の時間も経験値になります。';panel.append(note);
 }
 const prev=render;render=function(){prev();paint()};paint();
 })();
-</script><script>
-/* 9.2: single-page tab routing, preserving game logic and saved data. */
+</script><style>
+.pixel-icon{display:inline-block;width:24px;height:24px;vertical-align:middle;image-rendering:pixelated;flex:none}.pixel-icon svg{display:block;width:100%;height:100%;image-rendering:pixelated}.habit-emoji .pixel-icon{width:30px;height:30px}.job .em .pixel-icon{width:40px;height:40px}.careerhero .em .pixel-icon{width:54px;height:54px}.rpg-bottom .pixel-icon{width:21px;height:21px;margin:0 auto 3px}.pixel-icon--tiny{width:19px;height:19px}.sprite-controls{margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sprite-controls select{width:auto;max-width:210px;padding:7px}.sprite-tier{font-size:12px;color:#e6d5ff}.quest-category-icon{margin-right:5px}
+</style><script>
+/* 9.4 lightweight, original pixel icons: no external image assets. */
+const iconPatterns={
+ home:['00111100','01111110','11111111','11011011','11011011','11111111','11111111','00000000'],
+ quests:['00011000','00011000','00011000','00111100','00111100','01111110','00011000','00011000'],
+ focus:['00111100','01000010','10011001','10111001','10110001','10000001','01000010','00111100'],
+ career:['00011000','00111100','01111110','11011011','11011011','11111111','00100100','00100100'],
+ gear:['00011000','00100100','01111110','11000011','11000011','11111111','01111110','00000000'],
+ history:['01111110','01000010','01011010','01000010','01011010','01000010','01111110','00000000'],
+ manager:['01111110','11000011','11111111','11011011','11111111','11111111','00100100','00100100'],
+ it:['01111110','11000011','10100101','10011001','10100101','11000011','01111110','00111100'],
+ rehab:['00011000','00011000','01111110','01111110','00011000','00011000','00011000','00000000'],
+ coffee:['00000000','01111100','01000110','01000110','01000110','01111100','00111000','00000000'],
+ family:['00011000','00111100','01111110','11111111','11011011','11011011','11111111','00000000'],
+ learn:['00111100','01100110','11000011','11011011','11011011','11000011','01111110','00000000'],
+ health:['00000000','00100100','01111110','11111111','11111111','01111110','00111100','00011000'],
+ create:['00000011','00000110','00001100','00011000','00110000','01100000','11000000','00000000'],
+ practice:['01111110','01000010','01111110','01000010','01011010','01000010','01111110','00000000'],
+ community:['00011000','00111100','01111110','11011011','11011011','11111111','00100100','00000000'],
+ outdoor:['00011000','00111100','01111110','11111111','01111110','00100100','00100100','00000000'],
+ writer:['00000011','00000110','00001100','00011000','00110000','01100000','11000000','00000000'],
+ scholar:['00111100','01100110','11000011','11011011','11011011','11000011','01111110','00000000'],
+ mountain:['00011000','00111100','01111110','11111111','01111110','00100100','00100100','00000000'],
+ photo:['00000000','00111100','11111111','11011011','11011011','11111111','01111110','00000000'],
+ wellness:['00000000','00100100','01111110','11111111','11111111','01111110','00111100','00011000'],
+ regional:['00011000','00111100','01111110','11011011','11011011','11111111','00100100','00000000'],
+ business:['01111110','11000011','11111111','11011011','11111111','11111111','00100100','00100100'],
+ default:['00111100','01111110','11111111','11111111','11111111','11111111','01111110','00111100']};
+const iconColors={home:'#9cddf0',quests:'#f4d58a',focus:'#b4a0fc',career:'#dfbd86',gear:'#e4ae71',history:'#c8b3eb',manager:'#8bb7ef',it:'#8bdde2',rehab:'#f6f5e9',coffee:'#dca16d',family:'#f4acbf',learn:'#c6b4f7',health:'#91d6a4',create:'#e3c5f6',practice:'#e6c87e',community:'#a6d7f3',outdoor:'#9ad6b0'};
+function pixelIcon(type,small=false){const key=iconPatterns[type]?type:'default',rows=iconPatterns[key],fill=iconColors[type]||'#b8a5e9';const squares=[];for(let y=0;y<8;y++)for(let x=0;x<8;x++)if(rows[y][x]==='1')squares.push('<rect x="'+x+'" y="'+y+'" width="1" height="1"/>');return '<span class="pixel-icon'+(small?' pixel-icon--tiny':'')+'" aria-hidden="true"><svg viewBox="0 0 8 8" shape-rendering="crispEdges"><g fill="'+fill+'">'+squares.join('')+'</g></svg></span>'}
+function decoratePixels(){
+ document.querySelectorAll('.habit-emoji').forEach((e,i)=>{if(e.dataset.pixelDone)return;const h=e.closest('.habit-item')?.querySelector('.habit-content b')?.textContent||'';const type=/コーヒー/.test(h)?'coffee':/家族/.test(h)?'family':/休|筋トレ|散歩/.test(h)?'health':/読書|勉強/.test(h)?'learn':'create';e.innerHTML=pixelIcon(type);e.dataset.pixelDone='1'});
+ document.querySelectorAll('.job .em,.careerhero .em').forEach(e=>{if(e.dataset.pixelDone)return;const text=e.parentElement?.textContent||'';const c=careers.find(c=>text.includes(c[2]));e.innerHTML=pixelIcon(c?.[0]||'career');e.dataset.pixelDone='1'});
+ document.querySelectorAll('#tasks .task').forEach(e=>{const first=e.querySelector('span');if(!first||first.dataset.pixelDone)return;const task=state.tasks.find(t=>t.name===first.textContent);if(task){first.insertAdjacentHTML('afterbegin',pixelIcon(task.job||task.cat,true)+' ');first.dataset.pixelDone='1'}});
+ document.querySelectorAll('.rpg-bottom a').forEach(a=>{const icon=a.querySelector('span');if(icon&&!icon.dataset.pixelDone){icon.innerHTML=pixelIcon(a.dataset.tab||'home');icon.dataset.pixelDone='1'}});
+}
+const renderBefore94=render;render=function(){renderBefore94();decoratePixels();refreshSpriteOptions()};
+function refreshSpriteOptions(){const holder=document.querySelector('.rpg-identity');if(!holder)return;let controls=document.getElementById('spriteControls');if(!controls){controls=document.createElement('div');controls.id='spriteControls';controls.className='sprite-controls';controls.innerHTML='<label for="costumeSelect">衣装</label><select id="costumeSelect"><option value="job">職業に合わせる</option><option value="suit">スーツ姿</option></select><span id="spriteTier" class="sprite-tier"></span>';holder.append(controls);document.getElementById('costumeSelect').addEventListener('change',e=>{state.costume=e.target.value;save();render()})}document.getElementById('costumeSelect').value=state.costume||'job';const level=lv(total());document.getElementById('spriteTier').textContent='進化段階 '+(level>=5000?6:level>=1000?5:level>=500?4:level>=100?3:level>=50?2:1)+' / 6';}
+render();
+</script>
+<script>
+/* 9.4: single-page tab routing, preserving game logic and saved data. */
 (()=>{
 const main=document.querySelector('main');if(!main)return;
 const tabs=[['home','🏠','ホーム'],['quests','⚔️','クエスト'],['focus','⏱️','集中'],['career','🛡️','職業'],['gear','🎒','装備'],['history','📜','記録']];
@@ -241,6 +287,6 @@ function activate(tab){
  window.scrollTo(0,0);
 }
 for(const [id,emoji,label] of tabs){const a=document.createElement('a');a.href='#'+id;a.dataset.tab=id;a.innerHTML='<span>'+emoji+'</span>'+label;a.addEventListener('click',e=>{e.preventDefault();activate(id)});bottom.append(a)}
-activate('home');
+activate('home');decoratePixels();
 })();
 </script></body></html>
