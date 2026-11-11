@@ -479,4 +479,67 @@ activate('home');decoratePixels();
  const css=document.createElement('style');css.textContent='main>.q96[data-quest-tab]{display:none!important}main>.q96[data-quest-tab].tab-visible{display:block!important}';document.head.append(css);
  save();paintGoals();loadMonth();
 })();
+</script><script>/* v9.7 Growth Adventure: home boss missions and self-comparison */
+(()=>{
+const $=id=>document.getElementById(id), today=()=>new Date().toLocaleDateString('sv-SE');
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const now=new Date(),period=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+const hero=$('home');if(!hero)return;
+const panel=document.createElement('section');panel.className='card q97-panel';panel.id='q97Boss';panel.dataset.questTab='home';hero.after(panel);
+const growth=document.createElement('section');growth.className='card q97-panel';growth.id='q97Growth';growth.dataset.questTab='home';panel.after(growth);
+const css=document.createElement('style');css.textContent=`.q97-panel{border:1px solid #725d9c;background:linear-gradient(145deg,#242440,#1b2b42);}.q97-panel h2{color:#ffe3ac}.q97-muted{font-size:12px;color:#bac8df;line-height:1.6}.q97-meter{height:14px;border-radius:12px;background:#3d4560;overflow:hidden;margin:10px 0}.q97-meter>span{display:block;height:100%;background:linear-gradient(90deg,#8e71d5,#e1b76d)}.q97-mission{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #3b4c64}.q97-mission input{width:19px;height:19px;accent-color:#b29af0;flex-shrink:0}.q97-mission label{flex:1;margin:0;word-break:break-word}.q97-mission button,.q97-mini{padding:6px 9px;font-size:12px}.q97-other{border-top:1px solid #43516a;padding:10px 0}.q97-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.q97-stat{background:#293956;border-radius:10px;padding:10px 5px;text-align:center}.q97-stat strong{display:block;font-size:22px;color:#ffdf9c}.q97-bars{display:flex;align-items:end;gap:6px;height:115px;border-bottom:1px solid #53627c;padding:0 2px}.q97-barcol{flex:1;text-align:center;font-size:10px;color:#bac8df;min-width:0}.q97-bar{background:#977bdc;border-radius:5px 5px 0 0;min-height:2px}.q97-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.q97-panel button{background:#67518f;color:#fff}.q97-panel button.secondary{background:#394d6b}.q97-panel button.danger{background:#6b3d53}.q97-edit{margin:9px 0;padding:11px;background:#17263e;border-radius:12px}.q97-edit input{margin:5px 0 9px}`;document.head.append(css);
+if(!Array.isArray(state.goalChanges))state.goalChanges=[];
+const goals=()=>Array.isArray(state.goals)?state.goals:[];
+function persist(){save()}
+function record(g,action,before,after,reason=''){state.goalChanges.push({time:new Date().toISOString(),goalId:g.id,goalName:g.name,action,before,after,reason});persist()}
+const find=id=>goals().find(g=>String(g.id)===String(id));
+function missions(g){if(!Array.isArray(g.missions))g.missions=[];return g.missions}
+function addMission(g,name){const m={id:Date.now()+Math.random(),name,done:false,createdAt:new Date().toISOString()};missions(g).push(m);record(g,'ミッション追加','',name);paint()}
+function updateMission(g,m,name){const old=m.name;m.name=name;record(g,'ミッション編集',old,name);paint()}
+function removeMission(g,m){record(g,'ミッション削除',m.name,'');g.missions=g.missions.filter(x=>x!==m);paint()}
+function setMission(g,m,checked){if(g.status==='done')return;m.done=checked;if(checked){m.completedAt=new Date().toISOString();if(!m.rewarded){m.rewarded=true;addLog('ミッション達成：'+m.name,'practice',20,undefined,'manager')}}else m.completedAt=null;persist();render();paint()}
+function meter(p){return `<div class="q97-meter"><span style="width:${Math.max(0,Math.min(100,p))}%"></span></div>`}
+function fraction(g){const m=missions(g);return m.length?m.filter(x=>x.done).length/m.length*100:0}
+function bossCard(g,primary){const m=missions(g),pct=fraction(g);return `<div class="${primary?'':'q97-other'}"><div class="q97-muted">${primary?'🐉 最優先の中ボス':'⚔ その他の目標'} · ${safe(g.period)}</div><h3 style="margin:8px 0">${safe(g.name)}</h3>${meter(pct)}<div class="q97-muted">${m.filter(x=>x.done).length}/${m.length} ミッション完了 · ${Math.round(pct)}% · 討伐報酬 ${Number(g.xp)||300} XP</div>${primary?m.map(x=>`<div class="q97-mission"><input type="checkbox" data-g="${g.id}" data-m="${x.id}" ${x.done?'checked':''}><label>${safe(x.name)}</label><button class="secondary" data-edit="${x.id}" data-g="${g.id}">編集</button><button class="danger" data-del="${x.id}" data-g="${g.id}">×</button></div>`).join('')+`<div class="q97-actions"><button data-add="${g.id}">＋ ミッション追加</button><button class="secondary" data-goal="${g.id}">目標を編集</button><button class="secondary" data-priority="${g.id}">優先表示</button></div><div id="q97Editor"></div>`:`<div class="q97-actions"><button class="secondary" data-priority="${g.id}">最優先にする</button></div>`}</div>`}
+function paint(){const open=goals().filter(g=>g.status!=='done'&&g.type==='month'&&g.period===period);const sorted=open.sort((a,b)=>(String(a.id)===String(state.primaryGoalId)?-1:0)-(String(b.id)===String(state.primaryGoalId)?-1:0));
+ panel.innerHTML='<h2>🏰 今月の中ボスとミッション</h2>'+(sorted.length?bossCard(sorted[0],true)+sorted.slice(1).map(g=>bossCard(g,false)).join(''):'<p class="q97-muted">今月の目標はまだありません。「職業」タブの中ボス・目標の間で月間ゴールを登録してください。</p><button id="q97Create">目標を登録する</button>')+'<p class="q97-muted">年間・四半期のゴールは「職業」タブで管理できます。</p><details><summary class="q97-muted">📜 目標・ミッションの変更履歴</summary>'+((state.goalChanges||[]).slice(-20).reverse().map(h=>'<p class="q97-muted">'+safe(new Date(h.time).toLocaleString('ja-JP'))+' · '+safe(h.action)+' · '+safe(h.before||'')+(h.after?' → '+safe(h.after):'')+(h.reason?'（'+safe(h.reason)+'）':'')+'</p>').join('')||'<p class="q97-muted">まだ変更履歴はありません。</p>')+'</details>';
+ panel.querySelector('#q97Create')?.addEventListener('click',()=>document.querySelector('.rpg-bottom a[data-tab="career"]')?.click());
+ panel.querySelectorAll('[data-priority]').forEach(b=>b.onclick=()=>{state.primaryGoalId=b.dataset.priority;persist();paint()});
+ panel.querySelectorAll('[data-goal]').forEach(b=>{b.onclick=()=>{document.querySelector('.rpg-bottom a[data-tab="career"]')?.click();const g=find(b.dataset.goal);const cards=[...document.querySelectorAll('#q96GoalOpen .q96-card')];const match=cards.find(x=>x.querySelector('b')?.textContent.includes(g?.name));match?.querySelector('button')?.click()}});
+ panel.querySelectorAll('input[data-m]').forEach(c=>c.onchange=()=>{const g=find(c.dataset.g),m=missions(g).find(x=>String(x.id)===c.dataset.m);if(g&&m)setMission(g,m,c.checked)});
+ panel.querySelectorAll('[data-add],[data-edit]').forEach(b=>b.onclick=()=>{const g=find(b.dataset.g||b.dataset.add),m=b.dataset.edit?missions(g).find(x=>String(x.id)===b.dataset.edit):null;const editor=$('q97Editor');if(!editor)return;editor.innerHTML='<div class="q97-edit"><label>ミッションの内容</label><input id="q97Name" maxlength="120" placeholder="例：担当業務を書き出す"><label>変更理由（任意）</label><input id="q97Reason" maxlength="120" placeholder="例：状況に合わせて調整"><div class="q97-actions"><button id="q97Save">保存</button><button class="secondary" id="q97Cancel">キャンセル</button></div></div>';$('q97Name').value=m?.name||'';$('q97Cancel').onclick=()=>editor.replaceChildren();$('q97Save').onclick=()=>{const name=$('q97Name').value.trim(),reason=$('q97Reason').value.trim();if(!name)return alert('ミッション名を入力してください');if(m){const old=m.name;m.name=name;record(g,'ミッション編集',old,name,reason);paint()}else addMission(g,name)}});
+ panel.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const g=find(b.dataset.g),m=missions(g).find(x=>String(x.id)===b.dataset.del);if(m&&confirm('ミッションを削除しますか？ 達成済みのXPは維持されます。'))removeMission(g,m)});
+ paintGrowth()}
+function dateKey(t){const d=new Date(t);return Number.isNaN(d.getTime())?'':d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function paintGrowth(){const log=Array.isArray(state.log)?state.log:[];const y=now.getFullYear(),date=today(),yesterday=new Date(now);yesterday.setDate(yesterday.getDate()-1);const prev=dateKey(yesterday);const quest=log.filter(l=>!String(l.name||'').startsWith('中ボス討伐：')&&!String(l.name||'').startsWith('ミッション達成：'));
+ const count=d=>quest.filter(l=>dateKey(l.time)===d).length,annual=quest.filter(l=>dateKey(l.time).startsWith(y+'-')).length;
+ const days=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(6-i));return {date:dateKey(d),label:(d.getMonth()+1)+'/'+d.getDate()}});const vals=days.map(d=>count(d.date)),max=Math.max(1,...vals);
+ growth.innerHTML=`<h2>📈 昨日までの自分からの成長</h2><div class="q97-cols"><div class="q97-stat"><div class="q97-muted">今日</div><strong>${count(date)}</strong><small>件達成</small></div><div class="q97-stat"><div class="q97-muted">昨日</div><strong>${count(prev)}</strong><small>件達成</small></div><div class="q97-stat"><div class="q97-muted">今年の累計</div><strong>${annual}</strong><small>件達成</small></div></div><p class="q97-muted">過去7日間の達成数</p><div class="q97-bars">${days.map((d,i)=>`<div class="q97-barcol"><div>${vals[i]}</div><div class="q97-bar" style="height:${Math.max(2,vals[i]/max*78)}px"></div><div>${d.label}</div></div>`).join('')}</div><p class="q97-muted">昨日より少ない日も、積み上げた記録は消えません。詳しい週・月・年の記録は「記録」タブへ。</p><p class="q97-muted">🏅 討伐した中ボス：${goals().filter(g=>g.status==='done').length}体 · 達成済みミッション：${goals().flatMap(g=>missions(g)).filter(m=>m.done).length}件</p>`}
+// Block accidental boss completion before all listed missions are done.
+const open=$('q96GoalOpen');if(open)open.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!b.textContent.includes('討伐・達成'))return;const card=b.closest('.q96-card');const name=card?.querySelector('b')?.textContent.replace(/^🐉\s*/,'');const g=goals().find(x=>x.status!=='done'&&x.name===name);if(g&&missions(g).length&&!missions(g).every(m=>m.done)){e.stopImmediatePropagation();alert('中ボスを討伐するには、すべてのミッションを達成してください。');}},true);
+// Capture changes to goals in the existing goal editor.
+const goalForm=$('q96GoalForm');if(goalForm)goalForm.addEventListener('submit',()=>{const id=$('q96GoalId')?.value,g=find(id);if(!g)return;const before=JSON.stringify({name:g.name,type:g.type,period:g.period,xp:g.xp,memo:g.memo});const after=JSON.stringify({name:$('q96GoalName').value,type:$('q96GoalType').value,period:$('q96GoalPeriod').value,xp:Number($('q96GoalXP').value),memo:$('q96GoalMemo').value});if(before!==after)record(g,'目標編集',before,after);},false);
+const oldRender=render;render=function(){oldRender();paintGrowth()};
+// Sections are appended after tab router initialization; honor the active tab.
+function sync(){const active=document.querySelector('.rpg-bottom a.active')?.dataset.tab==='home';panel.classList.toggle('tab-visible',active);growth.classList.toggle('tab-visible',active)}
+document.querySelectorAll('.rpg-bottom a').forEach(a=>a.addEventListener('click',()=>{paint();sync()}));
+const style=document.createElement('style');style.textContent='main>.q97-panel[data-quest-tab]{display:none!important}main>.q97-panel[data-quest-tab].tab-visible{display:block!important}';document.head.append(style);
+paint();sync();
+window.addEventListener('pageshow',()=>{paint();sync()});
+})();
+</script><script>/* v9.8: Move the existing finance dashboard and entry form to the home tab without changing stored data. */
+(function(){
+ const finance=document.getElementById('q96Finance');
+ const growth=document.getElementById('q97Growth');
+ if(!finance||!growth)return;
+ growth.insertAdjacentElement('afterend',finance);
+ finance.dataset.questTab='home';
+ function syncFinance(){
+   const active=document.querySelector('.rpg-bottom a.active');
+   finance.classList.toggle('tab-visible',active?.dataset.tab==='home');
+ }
+ document.querySelectorAll('.rpg-bottom a').forEach(a=>a.addEventListener('click',syncFinance));
+ window.addEventListener('pageshow',syncFinance);
+ syncFinance();
+})();
 </script></body></html>
