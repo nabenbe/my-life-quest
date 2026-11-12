@@ -449,19 +449,19 @@ activate('home');decoratePixels();
  }
 
  const fin=$('section',{className:'q96',id:'q96Finance'});
- fin.innerHTML=`<h2>💰 年間収入・売上の見える化</h2><p class="q96-note">会社2社と個人事業3部門の実績を毎月入力できます。金額は税込・税引前など、ご自身で基準を統一してください。端末内保存で、公開GitHubには送信しません。</p>
+ fin.innerHTML=`<h2>💰 年間収入・売上の見える化</h2><p class="q96-note">会社2社と個人事業3部門、その他所得を毎月入力できます。金額は税込・税引前など、ご自身で基準を統一してください。端末内保存で、公開GitHubには送信しません。</p>
  <div class="q96-grid"><div><label>集計年</label><input type="number" id="q96Year" min="2000" max="2200"></div><div><label>年間目標（円）</label><input type="number" id="q96Target" min="0" step="1" placeholder="例：6000000"></div></div>
  <div class="q96-card" id="q96Annual"></div><label>入力する月</label><select id="q96Month"></select>
  <form id="q96FinanceForm"><div class="q96-grid"><div><label>会社A</label><input id="q96CompanyA" type="number" min="0" step="1"></div><div><label>会社B</label><input id="q96CompanyB" type="number" min="0" step="1"></div></div>
  <h3>個人事業の内訳</h3><div class="q96-grid"><div><label>委託事業</label><input id="q96Contract" type="number" min="0" step="1"></div><div><label>コーヒー事業</label><input id="q96Coffee" type="number" min="0" step="1"></div><div><label>地域事業</label><input id="q96Regional" type="number" min="0" step="1"></div></div>
- <div class="q96-actions"><button type="submit">この月の実績を保存</button><button type="button" class="alt" id="q96ClearMonth">この月の入力を消去</button></div></form>
+ <h3>その他所得（自由入力）</h3><div class="q96-grid"><div><label>所得の内容・名称</label><input id="q96OtherName" type="text" maxlength="80" placeholder="例：講師料・単発収入"></div><div><label>金額（円）</label><input id="q96Other" type="number" min="0" step="1" placeholder="0"></div></div><div class="q96-actions"><button type="submit">この月の実績を保存</button><button type="button" class="alt" id="q96ClearMonth">この月の入力を消去</button></div></form>
  <h3>月別実績</h3><div id="q96FinanceTable"></div><p class="q96-note">※会社からの給与と事業売上は会計上の意味が異なります。ここでは生活設計のための「収入・売上の合算目安」として表示し、税金・経費・手取りは計算しません。</p>`;
  goals.parentElement.insertBefore(fin,goals.nextSibling);fin.dataset.questTab='career';
  const now=new Date();field('q96Year').value=now.getFullYear();for(let m=1;m<=12;m++)field('q96Month').add(new Option(m+'月',String(m).padStart(2,'0')));field('q96Month').value=String(now.getMonth()+1).padStart(2,'0');
- const keys=['companyA','companyB','contract','coffee','regional'];const ids=['q96CompanyA','q96CompanyB','q96Contract','q96Coffee','q96Regional'];
+ const keys=['companyA','companyB','contract','coffee','regional','other'];const ids=['q96CompanyA','q96CompanyB','q96Contract','q96Coffee','q96Regional','q96Other'];
  const currentKey=()=>field('q96Year').value+'-'+field('q96Month').value;
  const amount=o=>keys.reduce((s,k)=>s+(Number(o?.[k])||0),0);
- function loadMonth(){const o=state.finance.months[currentKey()]||{};keys.forEach((k,i)=>field(ids[i]).value=o[k]??'');paintFinance()}
+ function loadMonth(){const o=state.finance.months[currentKey()]||{};keys.forEach((k,i)=>field(ids[i]).value=o[k]??'');field('q96OtherName').value=o.otherName||'';paintFinance()}
  function paintFinance(){const year=Number(field('q96Year').value),rows=Array.from({length:12},(_,i)=>({month:String(i+1).padStart(2,'0'),data:state.finance.months[year+'-'+String(i+1).padStart(2,'0')]}));
   const totalY=rows.reduce((s,r)=>s+amount(r.data),0),target=Number(state.finance.targets?.[year]||0),pct=target?Math.min(100,totalY/target*100):0;
   field('q96Target').value=target||'';
@@ -471,7 +471,7 @@ activate('home');decoratePixels();
  }
  field('q96Year').onchange=loadMonth;field('q96Month').onchange=loadMonth;
  field('q96Target').onchange=()=>{const year=Number(field('q96Year').value),v=Number(field('q96Target').value);if(!Number.isFinite(v)||v<0){alert('目標は0円以上で入力してください');return}state.finance.targets=state.finance.targets||{};state.finance.targets[year]=Math.round(v);save();paintFinance()};
- field('q96FinanceForm').onsubmit=e=>{e.preventDefault();const o={};for(let i=0;i<keys.length;i++){const raw=field(ids[i]).value;if(raw===''||!Number.isSafeInteger(Number(raw))||Number(raw)<0){alert('5項目すべてに0円以上の整数を入力してください。収入がない部門は0を入力します。');return}o[keys[i]]=Number(raw)}state.finance.months[currentKey()]=o;save();paintFinance();alert('月次実績を保存しました')};
+ field('q96FinanceForm').onsubmit=e=>{e.preventDefault();const o={};for(let i=0;i<keys.length;i++){const raw=field(ids[i]).value||(keys[i]==='other'?'0':'');if(raw===''||!Number.isSafeInteger(Number(raw))||Number(raw)<0){alert('すべての金額に0円以上の整数を入力してください。収入がない項目は0を入力します。');return}o[keys[i]]=Number(raw)}o.otherName=field('q96OtherName').value.trim();state.finance.months[currentKey()]=o;save();paintFinance();alert('月次実績を保存しました')};
  field('q96ClearMonth').onclick=()=>{if(!confirm(currentKey()+'の入力済み金額を消去しますか？'))return;delete state.finance.months[currentKey()];save();loadMonth()};
  document.querySelectorAll('.rpg-bottom a').forEach(a=>a.addEventListener('click',()=>{for(const x of [goals,fin])x.classList.toggle('tab-visible',a.dataset.tab==='career')}));
  const active=document.querySelector('.rpg-bottom a.active')?.dataset.tab==='career';goals.classList.toggle('tab-visible',active);fin.classList.toggle('tab-visible',active);
@@ -591,8 +591,9 @@ function change(g,m,checked){if(g.status==='done')return;m.done=checked;m.comple
  log(g,checked?'ミッション達成':'ミッション未達成へ変更',m.name,checked?'完了':'未完了');
  if(done(g))complete(g);draw();}
 function row(g,m){return `<div class="q993-row"><input type="checkbox" data-check="${esc(m.id)}" data-goal="${esc(g.id)}" ${m.done?'checked':''}><span style="${m.done?'text-decoration:line-through;opacity:.75':''}">${esc(m.name)}</span><button class="secondary" data-edit="${esc(m.id)}" data-goal="${esc(g.id)}">編集</button><button class="danger" data-delete="${esc(m.id)}" data-goal="${esc(g.id)}">×</button></div>`}
+function bossSprite(type){const rows=type==='year'?['00111100','01111110','11111111','11011011','11111111','01100110','11000011','10000001']:['00100100','01111110','11111111','11011011','11111111','01111110','00100100','01000010'];let pixels='';for(let y=0;y<8;y++)for(let x=0;x<8;x++)if(rows[y][x]==='1')pixels+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';return '<span class="q996-boss-sprite" aria-hidden="true"><svg viewBox="0 0 8 8" shape-rendering="crispEdges" fill="'+(type==='year'?'#f3b66b':'#a9a1ff')+'">'+pixels+'</svg></span>'}
 function card(g,primary){const ms=missions(g),count=ms.filter(m=>m.done).length,pct=ms.length?Math.round(count/ms.length*100):0;
- return `<div class="q993-entry"><div class="q993-muted">${g.type==='year'?'🐲 年間大ボス':primary?'🐉 最優先の中ボス':'⚔️ その他の中ボス'} · ${esc(g.period)}</div><h3>${esc(g.name)}</h3><div class="q993-muted">実行ミッション ${count}/${ms.length} · 達成率 ${pct}%</div><div class="q993-meter"><div style="width:${pct}%"></div></div>${primary?ms.map(m=>row(g,m)).join('')+'<button data-add="'+esc(g.id)+'">＋ 実行ミッションを追加</button>':`<button class="secondary" data-priority="${esc(g.id)}">最優先にする</button><button class="secondary" data-expand="${esc(g.id)}">ミッションを表示</button>`}<div class="q993-muted">すべてチェックすると自動討伐 · 報酬 ${Number(g.xp)||300} XP</div></div>`}
+ return `<div class="q993-entry"><div class="q993-muted">${bossSprite(g.type)} ${g.type==='year'?'年間大ボス':primary?'最優先の中ボス':'その他の中ボス'} · ${esc(g.period)}</div><h3>${esc(g.name)}</h3><div class="q993-muted">実行ミッション ${count}/${ms.length} · 達成率 ${pct}%</div><div class="q993-meter"><div style="width:${pct}%"></div></div>${primary?ms.map(m=>row(g,m)).join('')+'<button data-add="'+esc(g.id)+'">＋ 実行ミッションを追加</button>':`<button class="secondary" data-priority="${esc(g.id)}">最優先にする</button><button class="secondary" data-expand="${esc(g.id)}">ミッションを表示</button>`}<div class="q993-muted">すべてチェックすると自動討伐 · 報酬 ${Number(g.xp)||300} XP</div></div>`}
 function draw(){
  const now=new Date(),year=String(now.getFullYear()),month=year+'-'+String(now.getMonth()+1).padStart(2,'0');
  const quarter=year+'-Q'+(Math.floor(now.getMonth()/3)+1);
@@ -601,9 +602,9 @@ function draw(){
  const monthly=active().filter(g=>g.type==='month').sort((a,b)=>((String(b.id)===String(state.primaryGoalId)?4:0)+(b.period===month?2:0))-((String(a.id)===String(state.primaryGoalId)?4:0)+(a.period===month?2:0)));
  const section=(heading,gs,empty)=>'<h2>'+heading+'</h2>'+(gs.length?gs.map((g,i)=>card(g,i===0)).join(''):'<p class="q993-muted">'+empty+'</p>');
  const selected=active().find(g=>String(g.id)===String(state.q993Expanded));
- panel.innerHTML=section('🐲 今年の大ボス・実行ミッション',annual,'年間目標を「職業」タブで登録してください。')+
- section('🏰 今月の中ボス・実行ミッション',monthly,'月間目標を「職業」タブで登録してください。')+
- (quarterly.length?section('⚔️ 四半期の中ボス・実行ミッション',quarterly,''):'')+
+ panel.innerHTML=section(bossSprite('year')+' 今年の大ボス・実行ミッション',annual,'年間目標を「職業」タブで登録してください。')+
+ section(bossSprite('month')+' 今月の中ボス・実行ミッション',monthly,'月間目標を「職業」タブで登録してください。')+
+ (quarterly.length?section(bossSprite('quarter')+' 四半期の中ボス・実行ミッション',quarterly,''):'')+
  (selected?`<div class="q993-entry"><h3>${esc(selected.name)} の実行ミッション</h3>${missions(selected).map(m=>row(selected,m)).join('')}<button data-add="${esc(selected.id)}">＋ 実行ミッションを追加</button></div>`:'');
  panel.querySelectorAll('[data-check]').forEach(e=>e.onchange=()=>{const g=all().find(x=>String(x.id)===e.dataset.goal),m=g&&missions(g).find(x=>String(x.id)===e.dataset.check);if(m)change(g,m,e.checked)});
  panel.querySelectorAll('[data-add]').forEach(e=>e.onclick=()=>{const g=all().find(x=>String(x.id)===e.dataset.add),name=prompt('ボス討伐に必要な実行ミッションを入力');if(!g||!name?.trim())return;missions(g).push({id:Date.now()+Math.random(),name:name.trim(),done:false,createdAt:new Date().toISOString()});log(g,'ミッション追加','',name.trim());draw()});
@@ -616,7 +617,7 @@ function draw(){
 const career=$('q96Goals');if(career){const room=document.createElement('section');room.id='q993Career';room.className='q96';room.dataset.questTab='career';career.before(room);
  const style=document.createElement('style');style.textContent='#q993Career{display:none!important}#q993Career.tab-visible{display:block!important}';document.head.append(style);
  function paintCareer(){const previous=room.querySelector('select')?.value;room.innerHTML='<h2>⚔️ 大ボス・中ボスの実行ミッション（9.9.5）</h2><p class="q993-muted">年間の大ボス、四半期・月間の中ボスを選び、直接ミッションを設定できます。</p><select id="q993Select"></select><div id="q993CareerTasks"></div>';
- const sel=room.querySelector('select');active().forEach(g=>{const opt=document.createElement('option');opt.value=String(g.id);opt.textContent=(g.type==='year'?'🐲 大ボス｜':'⚔️ 中ボス｜')+g.period+'｜'+g.name;sel.append(opt)});if(active().some(g=>String(g.id)===previous))sel.value=previous;
+ const sel=room.querySelector('select');active().forEach(g=>{const opt=document.createElement('option');opt.value=String(g.id);opt.textContent=(g.type==='year'?'大ボス｜':'中ボス｜')+g.period+'｜'+g.name;sel.append(opt)});if(active().some(g=>String(g.id)===previous))sel.value=previous;
  function paintTasks(){const g=active().find(x=>String(x.id)===sel.value),target=$('q993CareerTasks');if(!g){target.innerHTML='<p class="q993-muted">まず下の「中ボス・目標の間」でゴールを登録してください。</p>';return}
  const ms=missions(g),count=ms.filter(m=>m.done).length;target.innerHTML=`<div class="q993-entry"><h3>${esc(g.name)}</h3><div class="q993-muted">${count}/${ms.length} 完了</div><div class="q993-meter"><div style="width:${ms.length?count/ms.length*100:0}%"></div></div>${ms.map(m=>row(g,m)).join('')}<button id="q993CareerAdd">＋ 実行ミッションを追加</button></div>`;
  target.querySelector('#q993CareerAdd').onclick=()=>{const name=prompt('実行ミッション名');if(!name?.trim())return;ms.push({id:Date.now()+Math.random(),name:name.trim(),done:false});log(g,'ミッション追加','',name.trim());paintTasks();draw()};
@@ -631,4 +632,6 @@ const career=$('q96Goals');if(career){const room=document.createElement('section
  paintCareer();}
 // Legacy editor stays hidden; all missions are now directly under bosses.
 draw();
-})();</script></body></html>
+})();</script><style>.q996-boss-sprite{display:inline-flex;width:30px;height:30px;vertical-align:middle;margin-right:5px;image-rendering:pixelated}.q996-boss-sprite svg{width:100%;height:100%;image-rendering:pixelated}.habit-emoji svg{image-rendering:pixelated}</style><script>/* v9.9.6: keep habit sprites after every completion/re-render */
+(()=>{let updating=false;function fix(){if(updating)return;updating=true;try{if(typeof decoratePixels==='function')decoratePixels();}finally{updating=false}}let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;const stale=[...document.querySelectorAll('.habit-emoji')].some(e=>!e.querySelector('svg'));if(stale){document.querySelectorAll('.habit-emoji').forEach(e=>{if(!e.querySelector('svg'))delete e.dataset.pixelDone});fix()}})}).observe(document.body,{childList:true,subtree:true});fix()})();
+</script></body></html>
