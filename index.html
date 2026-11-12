@@ -591,4 +591,79 @@ window.addEventListener('pageshow',()=>{paint();sync()});
  const style=document.createElement('style');style.textContent='#q991SubgoalRoom{display:none}#q991SubgoalRoom.tab-visible{display:block!important}#q991SubgoalRoom .q97-mission{display:flex;gap:7px;align-items:center;margin:8px 0}#q991SubgoalRoom .q97-mission label{flex:1}#q991SubgoalRoom .q97-mission input{width:20px;height:20px}#q991SubgoalRoom .q97-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}#q991SubgoalRoom .q97-actions button{font-size:12px;padding:7px}';document.head.append(style);
  window.addEventListener('mlq-goals-updated',()=>{ /* home re-renders when the home tab is selected */ });
  refresh();
+})();</script><style>
+#q97Boss,#q991SubgoalRoom{display:none!important}
+#q993Room{border:1px solid #765e9d;background:linear-gradient(145deg,#292741,#1b2b42)}
+.q993-entry{background:#18263d;border:1px solid #435779;border-radius:12px;padding:12px;margin:12px 0}
+.q993-row{display:flex;gap:8px;align-items:center;margin:10px 0}.q993-row input[type=checkbox]{width:22px;height:22px;flex-shrink:0;accent-color:#ad8bef}.q993-row span{flex:1;overflow-wrap:anywhere}.q993-row button{padding:7px;font-size:12px}.q993-meter{height:13px;border-radius:20px;background:#43516a;overflow:hidden}.q993-meter>div{height:100%;background:linear-gradient(90deg,#8b6cda,#e9bf76)}
+#q993Room button{margin:4px 3px 4px 0}.q993-muted{color:#bbcae0;font-size:12px;line-height:1.6}
+</style><script>/* MY LIFE QUEST v9.9.3 - direct boss execution missions */
+(()=>{
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+if(!Array.isArray(state.goals))state.goals=[];
+if(!Array.isArray(state.goalChanges))state.goalChanges=[];
+const all=()=>state.goals,active=()=>all().filter(g=>g.status!=='done');
+// Keep old subgoal data as an archive and move their actions into direct boss missions once.
+let migrated=false;
+for(const g of all()){
+ if(g.migrated993)continue;
+ if(!Array.isArray(g.missions))g.missions=[];
+ if(Array.isArray(g.subgoals)&&g.subgoals.length){
+  g.legacySubgoals993=JSON.parse(JSON.stringify(g.subgoals));
+  for(const sg of g.subgoals){for(const m of (sg.missions||[])){
+   if(!g.missions.some(x=>String(x.id)===String(m.id)))g.missions.push({...m,name:sg.name+'：'+m.name});
+  }}
+  g.subgoals=[];migrated=true;
+ }
+ g.migrated993=true;
+}
+if(migrated)save();
+const old=$('q97Boss'),hero=$('home');if(!hero)return;
+const panel=document.createElement('section');panel.id='q993Room';panel.className='card q97-panel';panel.dataset.questTab='home';
+(old||hero).before(panel);
+const log=(g,action,before='',after='')=>{state.goalChanges.push({time:new Date().toISOString(),goalId:g.id,goalName:g.name,action,before,after});save()};
+const missions=g=>(Array.isArray(g.missions)?g.missions:(g.missions=[]));
+const done=g=>missions(g).length>0&&missions(g).every(m=>m.done);
+function complete(g){if(g.status==='done'||!done(g))return;
+ g.status='done';g.completedAt=new Date().toISOString();g.title=({month:'月間',quarter:'四半期',year:'年間'}[g.type]||'目標')+'の中ボス討伐者 '+(all().filter(x=>x.status==='done').length)+'号';
+ log(g,'実行ミッション全達成・中ボス自動討伐','',g.name);
+ if(!g.rewarded993){g.rewarded993=true;addLog('中ボス討伐：'+g.name,'practice',Number(g.xp)||300,undefined,'manager')}
+ save();
+}
+function change(g,m,checked){if(g.status==='done')return;m.done=checked;m.completedAt=checked?new Date().toISOString():null;
+ if(checked&&!m.rewarded){m.rewarded=true;addLog('ミッション達成：'+m.name,'practice',20,undefined,'manager')}
+ log(g,checked?'ミッション達成':'ミッション未達成へ変更',m.name,checked?'完了':'未完了');
+ if(done(g))complete(g);draw();}
+function row(g,m){return `<div class="q993-row"><input type="checkbox" data-check="${esc(m.id)}" data-goal="${esc(g.id)}" ${m.done?'checked':''}><span style="${m.done?'text-decoration:line-through;opacity:.75':''}">${esc(m.name)}</span><button class="secondary" data-edit="${esc(m.id)}" data-goal="${esc(g.id)}">編集</button><button class="danger" data-delete="${esc(m.id)}" data-goal="${esc(g.id)}">×</button></div>`}
+function card(g,primary){const ms=missions(g),count=ms.filter(m=>m.done).length,pct=ms.length?Math.round(count/ms.length*100):0;
+ return `<div class="q993-entry"><div class="q993-muted">${primary?'🐉 最優先の中ボス':'⚔️ その他の中ボス'} · ${esc(g.period)}</div><h3>${esc(g.name)}</h3><div class="q993-muted">実行ミッション ${count}/${ms.length} · 達成率 ${pct}%</div><div class="q993-meter"><div style="width:${pct}%"></div></div>${primary?ms.map(m=>row(g,m)).join('')+'<button data-add="'+esc(g.id)+'">＋ 実行ミッションを追加</button>':`<button class="secondary" data-priority="${esc(g.id)}">最優先にする</button><button class="secondary" data-expand="${esc(g.id)}">ミッションを表示</button>`}<div class="q993-muted">すべてチェックすると自動討伐 · 報酬 ${Number(g.xp)||300} XP</div></div>`}
+function draw(){const month=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');const gs=active().filter(g=>g.type==='month').sort((a,b)=>((String(b.id)===String(state.primaryGoalId)?4:0)+(b.period===month?2:0))-((String(a.id)===String(state.primaryGoalId)?4:0)+(a.period===month?2:0)));
+ const selected=gs.find(g=>String(g.id)===String(state.q993Expanded));
+ panel.innerHTML='<h2>🏰 今月の中ボス・実行ミッション <small style="font-size:12px">v9.9.3</small></h2>'+(gs.length?card(gs[0],true)+gs.slice(1).map(g=>card(g,false)).join(''):'<p class="q993-muted">月間ゴールはまだありません。「職業」タブから登録できます。</p>')+(selected&&selected!==gs[0]?`<div class="q993-entry"><h3>${esc(selected.name)} の実行ミッション</h3>${missions(selected).map(m=>row(selected,m)).join('')}<button data-add="${esc(selected.id)}">＋ 実行ミッションを追加</button></div>`:'')+'<p class="q993-muted">既存の小目標内のミッションは、直接ミッションへ移行します。以前の小目標はバックアップ用にデータ内へ保存します。</p>';
+ panel.querySelectorAll('[data-check]').forEach(e=>e.onchange=()=>{const g=all().find(x=>String(x.id)===e.dataset.goal),m=g&&missions(g).find(x=>String(x.id)===e.dataset.check);if(m)change(g,m,e.checked)});
+ panel.querySelectorAll('[data-add]').forEach(e=>e.onclick=()=>{const g=all().find(x=>String(x.id)===e.dataset.add),name=prompt('中ボス討伐に必要な実行ミッションを入力');if(!g||!name?.trim())return;missions(g).push({id:Date.now()+Math.random(),name:name.trim(),done:false,createdAt:new Date().toISOString()});log(g,'ミッション追加','',name.trim());draw()});
+ panel.querySelectorAll('[data-edit]').forEach(e=>e.onclick=()=>{const g=all().find(x=>String(x.id)===e.dataset.goal),m=g&&missions(g).find(x=>String(x.id)===e.dataset.edit);if(!m)return;const name=prompt('実行ミッションを編集',m.name);if(!name?.trim())return;log(g,'ミッション編集',m.name,name.trim());m.name=name.trim();save();draw()});
+ panel.querySelectorAll('[data-delete]').forEach(e=>e.onclick=()=>{const g=all().find(x=>String(x.id)===e.dataset.goal),m=g&&missions(g).find(x=>String(x.id)===e.dataset.delete);if(!m||!confirm('このミッションを削除しますか？'))return;g.missions=missions(g).filter(x=>x!==m);log(g,'ミッション削除',m.name,'');if(done(g))complete(g);draw()});
+ panel.querySelectorAll('[data-priority]').forEach(e=>e.onclick=()=>{state.primaryGoalId=e.dataset.priority;save();draw()});
+ panel.querySelectorAll('[data-expand]').forEach(e=>e.onclick=()=>{state.q993Expanded=e.dataset.expand;save();draw()});
+}
+// The career tab also gets direct mission editing for yearly and quarterly bosses.
+const career=$('q96Goals');if(career){const room=document.createElement('section');room.id='q993Career';room.className='q96';room.dataset.questTab='career';career.before(room);
+ const style=document.createElement('style');style.textContent='#q993Career{display:none!important}#q993Career.tab-visible{display:block!important}';document.head.append(style);
+ function paintCareer(){const previous=room.querySelector('select')?.value;room.innerHTML='<h2>⚔️ 中ボスの実行ミッション（9.9.3）</h2><p class="q993-muted">年間・四半期・月間の目標を選び、直接ミッションを設定できます。</p><select id="q993Select"></select><div id="q993CareerTasks"></div>';
+ const sel=room.querySelector('select');active().forEach(g=>{const opt=document.createElement('option');opt.value=String(g.id);opt.textContent=g.period+'｜'+g.name;sel.append(opt)});if(active().some(g=>String(g.id)===previous))sel.value=previous;
+ function paintTasks(){const g=active().find(x=>String(x.id)===sel.value),target=$('q993CareerTasks');if(!g){target.innerHTML='<p class="q993-muted">まず下の「中ボス・目標の間」でゴールを登録してください。</p>';return}
+ const ms=missions(g),count=ms.filter(m=>m.done).length;target.innerHTML=`<div class="q993-entry"><h3>${esc(g.name)}</h3><div class="q993-muted">${count}/${ms.length} 完了</div><div class="q993-meter"><div style="width:${ms.length?count/ms.length*100:0}%"></div></div>${ms.map(m=>row(g,m)).join('')}<button id="q993CareerAdd">＋ 実行ミッションを追加</button></div>`;
+ target.querySelector('#q993CareerAdd').onclick=()=>{const name=prompt('実行ミッション名');if(!name?.trim())return;ms.push({id:Date.now()+Math.random(),name:name.trim(),done:false});log(g,'ミッション追加','',name.trim());paintTasks();draw()};
+ target.querySelectorAll('[data-check]').forEach(e=>e.onchange=()=>{const m=ms.find(x=>String(x.id)===e.dataset.check);if(m){change(g,m,e.checked);paintCareer()}});
+ target.querySelectorAll('[data-edit]').forEach(e=>e.onclick=()=>{const m=ms.find(x=>String(x.id)===e.dataset.edit);if(!m)return;const v=prompt('ミッションを編集',m.name);if(!v?.trim())return;log(g,'ミッション編集',m.name,v.trim());m.name=v.trim();save();paintTasks();draw()});
+ target.querySelectorAll('[data-delete]').forEach(e=>e.onclick=()=>{const m=ms.find(x=>String(x.id)===e.dataset.delete);if(!m||!confirm('削除しますか？'))return;g.missions=ms.filter(x=>x!==m);log(g,'ミッション削除',m.name,'');if(done(g))complete(g);paintCareer();draw()});}
+ sel.onchange=paintTasks;paintTasks();}
+ document.querySelectorAll('.rpg-bottom a').forEach(a=>a.addEventListener('click',()=>{room.classList.toggle('tab-visible',a.dataset.tab==='career');if(a.dataset.tab==='career')paintCareer();if(a.dataset.tab==='home')draw()}));
+ room.classList.toggle('tab-visible',document.querySelector('.rpg-bottom a.active')?.dataset.tab==='career');
+ $('q96GoalForm')?.addEventListener('submit',()=>setTimeout(()=>{paintCareer();draw()},50));
+ $('q96GoalOpen')?.addEventListener('click',()=>setTimeout(()=>{paintCareer();draw()},50));
+ paintCareer();}
+// Legacy editor stays hidden; all missions are now directly under bosses.
+draw();
 })();</script></body></html>
