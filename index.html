@@ -56,6 +56,20 @@ body{overflow-x:hidden}
 .q96 .q96-meter{height:12px;border-radius:9px;background:#211c31;overflow:hidden;margin:9px 0}.q96 .q96-meter span{height:100%;display:block;background:#b18bff}
 .q96 .q96-nums{font-variant-numeric:tabular-nums}.q96 .q96-note{font-size:11px;line-height:1.6}
 #retiredFocusPanel{display:none!important}.task{flex-wrap:wrap}.task .secondary{font-size:11px;padding:7px}.habit-item{flex-wrap:wrap}
+</style><style id="q999-finance-style">
+.q999-source{padding:10px 0;border-bottom:1px solid rgba(180,160,220,.16)}
+.q999-source-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.q999-meter{margin:6px 0!important;height:10px!important}
+.q999-source small{opacity:.8}
+.q999-grand{font-weight:800;text-align:right;padding-top:14px}
+.q999-scroll{overflow-x:auto;max-width:100%;border:1px solid rgba(180,160,220,.25);border-radius:10px}
+.q999-table{border-collapse:collapse;min-width:740px;width:100%;font-size:12px}
+.q999-table th,.q999-table td{padding:9px 8px;border-bottom:1px solid rgba(180,160,220,.18);white-space:nowrap}
+.q999-table th{text-align:right;background:#282139;position:sticky;top:0}
+.q999-table th:first-child,.q999-table td:first-child{text-align:left;position:sticky;left:0;background:#282139}
+.q999-table .q999-num{text-align:right;font-variant-numeric:tabular-nums}
+.q999-table .q999-total td{font-weight:bold;background:#342849}
+.q999-table .q999-total td:first-child{background:#342849}
 </style></head><body><main>
 <p class="sub">MY LIFE QUEST · 9.9.8</p><h1>⚔ MY LIFE QUEST</h1><p class="sub">家族との時間を大切に。仕事も学びも、すべてが冒険になる。</p>
 <section class="card"><div class="top"><div><div class="muted">現在の称号</div><b id="title">人生の探究者</b></div><div class="level" id="level">Lv.1</div></div><div class="bar"><div class="fill" id="progress"></div></div><div class="sub" id="xp"></div><div class="notice" id="notice" role="status"></div></section>
@@ -455,7 +469,7 @@ activate('home');decoratePixels();
  <form id="q96FinanceForm"><div class="q96-grid"><div><label>会社A</label><input id="q96CompanyA" type="number" min="0" step="1"></div><div><label>会社B</label><input id="q96CompanyB" type="number" min="0" step="1"></div></div>
  <h3>個人事業の内訳</h3><div class="q96-grid"><div><label>委託事業</label><input id="q96Contract" type="number" min="0" step="1"></div><div><label>コーヒー事業</label><input id="q96Coffee" type="number" min="0" step="1"></div><div><label>地域事業</label><input id="q96Regional" type="number" min="0" step="1"></div></div>
  <h3>その他所得（自由入力）</h3><div class="q96-grid"><div><label>所得の内容・名称</label><input id="q96OtherName" type="text" maxlength="80" placeholder="例：講師料・単発収入"></div><div><label>金額（円）</label><input id="q96Other" type="number" min="0" step="1" placeholder="0"></div></div><div class="q96-actions"><button type="submit">この月の実績を保存</button><button type="button" class="alt" id="q96ClearMonth">この月の入力を消去</button></div></form>
- <h3>月別実績</h3><div id="q96FinanceTable"></div><p class="q96-note">※会社からの給与と事業売上は会計上の意味が異なります。ここでは生活設計のための「収入・売上の合算目安」として表示し、税金・経費・手取りは計算しません。</p>`;
+ <h3>事業・収入別 年間実績</h3><div id="q999AnnualBreakdown"></div><h3>月別・事業別の詳細表</h3><div id="q999MonthlyBreakdown"></div><h3>月別実績（合計）</h3><div id="q96FinanceTable"></div><p class="q96-note">※会社からの給与と事業売上は会計上の意味が異なります。ここでは生活設計のための「収入・売上の合算目安」として表示し、税金・経費・手取りは計算しません。</p>`;
  goals.parentElement.insertBefore(fin,goals.nextSibling);fin.dataset.questTab='career';
  const now=new Date();field('q96Year').value=now.getFullYear();for(let m=1;m<=12;m++)field('q96Month').add(new Option(m+'月',String(m).padStart(2,'0')));field('q96Month').value=String(now.getMonth()+1).padStart(2,'0');
  const keys=['companyA','companyB','contract','coffee','regional','other'];const ids=['q96CompanyA','q96CompanyB','q96Contract','q96Coffee','q96Regional','q96Other'];
@@ -467,6 +481,37 @@ activate('home');decoratePixels();
   field('q96Target').value=target||'';
   const a=field('q96Annual');a.replaceChildren();a.append($('strong',{className:'q96-nums'},fmt(totalY)+' 円 / '+(target?fmt(target)+' 円':'目標未設定')));
   const meter=$('div',{className:'q96-meter'});const fill=$('span');fill.style.width=pct+'%';meter.append(fill);a.append(meter,$('small',{},target?'目標達成率 '+(totalY/target*100).toFixed(1)+'%':'年間目標を入力すると達成率を表示します'));
+  // v9.9.9: annual source breakdown and monthly detail (read-only, no data migration).
+  const labels=['会社A','会社B','委託事業','コーヒー事業','地域事業','その他所得'];
+  const annual=keys.map((k,i)=>({key:k,label:labels[i],sum:rows.reduce((s,r)=>s+(Number(r.data?.[k])||0),0)}));
+  const largest=Math.max(1,...annual.map(x=>x.sum));
+  const breakdown=field('q999AnnualBreakdown');breakdown.replaceChildren();
+  const summary=$('div',{className:'q96-card'});
+  summary.append($('strong',{},year+'年の収入・売上内訳'));
+  for(const x of annual){
+   const item=$('div',{className:'q999-source'});
+   const head=$('div',{className:'q999-source-head'});
+   head.append($('span',{},x.label),$('b',{className:'q96-nums'},fmt(x.sum)+' 円'));
+   const meter=$('div',{className:'q96-meter q999-meter'}),bar=$('span');
+   bar.style.width=(x.sum/largest*100).toFixed(2)+'%';meter.append(bar);
+   const share=totalY?x.sum/totalY*100:0;
+   item.append(head,meter,$('small',{},'全体の '+share.toFixed(1)+'%'));
+   summary.append(item);
+  }
+  summary.append($('div',{className:'q999-grand'},'年間合計：'+fmt(totalY)+' 円'));
+  breakdown.append(summary);
+  const details=field('q999MonthlyBreakdown');details.replaceChildren();
+  const scroll=$('div',{className:'q999-scroll'}),grid=document.createElement('table');grid.className='q999-table';
+  const thead=document.createElement('thead'),hr=document.createElement('tr');
+  for(const label of ['月',...labels,'月合計']){const th=document.createElement('th');th.textContent=label;hr.append(th)}
+  thead.append(hr);grid.append(thead);
+  const tbody=document.createElement('tbody');
+  for(const r of rows){const tr=document.createElement('tr');const values=[Number(r.month)+'月',...keys.map(k=>r.data?fmt(Number(r.data[k])||0):'—'),r.data?fmt(amount(r.data)):'—'];
+   values.forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i>0)td.className='q999-num';tr.append(td)});tbody.append(tr)}
+  const tr=document.createElement('tr');tr.className='q999-total';
+  ['年間合計',...annual.map(x=>fmt(x.sum)),fmt(totalY)].forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i>0)td.className='q999-num';tr.append(td)});
+  tbody.append(tr);grid.append(tbody);scroll.append(grid);details.append(scroll);
+  details.append($('p',{className:'q96-note'},'表は左右にスクロールできます。未入力の月は「—」で表示します。'));
   const table=field('q96FinanceTable');table.replaceChildren();for(const r of rows){const line=$('div',{className:'q96-row q96-card'});line.append($('span',{},Number(r.month)+'月'),$('b',{className:'q96-nums'},r.data?fmt(amount(r.data))+' 円':'未入力'));table.append(line)}
  }
  field('q96Year').onchange=loadMonth;field('q96Month').onchange=loadMonth;
