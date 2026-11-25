@@ -71,7 +71,7 @@ body{overflow-x:hidden}
 .q999-table .q999-total td{font-weight:bold;background:#342849}
 .q999-table .q999-total td:first-child{background:#342849}
 </style></head><body><main>
-<p class="sub">MY LIFE QUEST · 9.9.8</p><h1>⚔ MY LIFE QUEST</h1><p class="sub">家族との時間を大切に。仕事も学びも、すべてが冒険になる。</p>
+<p class="sub">MY LIFE QUEST · 10.0.0</p><h1>⚔ MY LIFE QUEST</h1><p class="sub">家族との時間を大切に。仕事も学びも、すべてが冒険になる。</p>
 <section class="card"><div class="top"><div><div class="muted">現在の称号</div><b id="title">人生の探究者</b></div><div class="level" id="level">Lv.1</div></div><div class="bar"><div class="fill" id="progress"></div></div><div class="sub" id="xp"></div><div class="notice" id="notice" role="status"></div></section>
 <section class="card"><h2>🧙 転職ギルド · 13の職業</h2><p class="hint">現実の活動で職業経験値を獲得。職業はいつでも変更でき、経験値はすべて保持されます。複数の職業を同時に育てられます。</p><div class="careerhero" id="activeCareer"></div><div class="jobs" id="jobs"></div></section><section class="card"><h2>📜 職業ごとの称号</h2><p class="hint">Lv.2・5・10・20で職業の称号が進化します。</p><div id="careerTitles" class="tree"></div></section><section class="card hero"><div class="questlabel">⚔️ ADVENTURER STATUS</div><div class="pixel">🧙‍♂️</div><p style="text-align:center;color:#ffdf86;font-weight:800">今日も自分の物語を進めよう</p><p style="text-align:center;font-size:12px">クエストを進めて、新しいエリアを解放しよう</p></section><section class="card"><h2>🗺️ 冒険マップ</h2><p class="hint">人生Lv.99,999まで冒険が続きます。人生全体のレベルが上がると新しいエリアが開きます。すべての活動が冒険の一歩です。</p><div class="world" id="world"></div></section><section class="card"><h2>🐉 ボスバトル</h2><p class="hint">クエストを達成するとボスにダメージ！ ボスを倒すと宝箱を獲得。負けや期限はありません。</p><div class="battle"><div class="top"><b id="bossName">霧の番人</b><span id="bossStage" class="small"></span></div><div class="enemy" id="bossEmoji">👾</div><div class="hp"><div id="bossHP" style="width:100%"></div></div><p class="small" id="bossText"></p><div class="buttons"><button id="claimBoss" type="button" style="display:none">🏆 討伐報酬を受け取る</button></div></div></section><section class="card"><h2>🎁 宝箱と装備</h2><div class="loot"><div class="top"><div><b>🧰 宝箱 <span id="chests">0</span> 個</b><div class="small">ボス討伐で獲得。中身はランダムな装備です。</div></div><button id="openChest" type="button">宝箱を開ける</button></div><p class="small" id="lootMessage" role="status"></p></div><h3 style="font-size:15px">🎒 所持装備</h3><p class="hint">装備は見た目と称号を楽しむためのもの。経験値倍率は変わりません。</p><div id="equipment" class="equip"></div></section><section class="card"><h2>✨ 成長する11の能力</h2><div class="grid" id="skills"></div></section>
 <section class="card"><h2>🌳 スキルツリー</h2><p class="section-note">各能力のレベルに応じて称号が解放されます。未解放の目標も表示します。</p><div class="tree" id="tree"></div></section>
@@ -413,6 +413,9 @@ activate('home');decoratePixels();
   if(state.tasks.some(x=>x!==t&&x.name===name)){alert('同じ名前のクエスト・習慣が存在します');return}
   t.name=name;t.xp=xp;t.job=field('q96TaskJob').value;t.cat=field('q96TaskCat').value;t.kind=field('q96TaskKind').value;
   t.habitDesc=field('q96TaskDesc').value.trim();t.mode='action';
+  // Persist the activity type together with the edited quest, without changing old completion logs.
+  const activitySelect=document.getElementById('q1000EditType');
+  if(activitySelect){state.activityTypes=state.activityTypes||{};state.activityTypes[String(t.id)]=activitySelect.value;}
   save();render();editor.querySelector('form').hidden=true;alert('変更を保存しました。過去の達成記録は維持されます。');
  };
  // Keep editor in the quests tab; when editing a home habit, switch to quests so it is visible.
@@ -679,4 +682,70 @@ const career=$('q96Goals');if(career){const room=document.createElement('section
 draw();
 })();</script><style>.q996-boss-sprite{display:inline-flex;width:30px;height:30px;vertical-align:middle;margin-right:5px;image-rendering:pixelated}.q996-boss-sprite svg{width:100%;height:100%;image-rendering:pixelated}.habit-emoji svg{image-rendering:pixelated}</style><script>/* v9.9.6: keep habit sprites after every completion/re-render */
 (()=>{let updating=false;function fix(){if(updating)return;updating=true;try{if(typeof decoratePixels==='function')decoratePixels();}finally{updating=false}}let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;const stale=[...document.querySelectorAll('.habit-emoji')].some(e=>!e.querySelector('svg'));if(stale){document.querySelectorAll('.habit-emoji').forEach(e=>{if(!e.querySelector('svg'))delete e.dataset.pixelDone});fix()}})}).observe(document.body,{childList:true,subtree:true});fix()})();
-</script></body></html>
+</script><style>
+#q1000Analysis{display:none!important}#q1000Analysis.tab-visible{display:block!important}
+.q1000-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.q1000-stat{background:#241d37;border:1px solid #51426c;border-radius:12px;padding:12px}.q1000-stat strong{display:block;font-size:24px;color:#ffe0a1}.q1000-muted{font-size:12px;color:#b9afca}.q1000-row{margin:12px 0}.q1000-track{height:16px;background:#30263f;border-radius:7px;overflow:hidden;display:flex}.q1000-work{background:#7196d8}.q1000-growth{background:#4ebd9a}.q1000-unset{background:#8a8296}.q1000-bars{display:flex;gap:3px;align-items:flex-end;height:105px;margin-top:10px}.q1000-month{flex:1;min-width:0;text-align:center;font-size:10px}.q1000-stack{height:88px;display:flex;flex-direction:column-reverse;justify-content:flex-start;background:#30263f;border-radius:4px;overflow:hidden}.q1000-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;margin:8px 0}.q1000-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:3px}.q1000-goal{margin:12px 0;padding:10px;border:1px solid #544669;border-radius:9px}.q1000-settings{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin:10px 0}.q1000-settings select{min-width:112px;max-width:140px}.q1000-period{display:flex;gap:7px;flex-wrap:wrap}.q1000-period button{flex:1;min-width:68px}.q1000-table{width:100%;border-collapse:collapse;font-size:12px}.q1000-table th,.q1000-table td{padding:8px 4px;border-bottom:1px solid #4b3d60;text-align:right}.q1000-table th:first-child,.q1000-table td:first-child{text-align:left}
+</style>
+<script>
+/* v10.0.0: activity analysis. All data stays inside existing lifequest-v2 state. */
+(()=>{
+'use strict';
+const TYPE={work:'実務・仕事',growth:'自己成長・未来への投資',unset:'未分類'};
+const COLOR={work:'#7196d8',growth:'#4ebd9a',unset:'#8a8296'};
+const fmt=n=>Number(n||0).toLocaleString('ja-JP');
+const day=v=>{const d=new Date(v);return Number.isNaN(+d)?'':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const isBonus=l=>/^(ミッション達成：|大ボス討伐：|中ボス討伐：)/.test(String(l.name||''));
+const isFocus=l=>l.cat==='focus'||l.job==='focus';
+const isHabit=l=>l.habit===true||l.type==='habit'||['ジャーナリング','コーヒー事業をすすめる','読書','ブログ記載（もやもやを吐き出す）','筋トレ・散歩','作業療法士勉強','家族との時間を楽しむ','自分のために休む'].includes(l.name);
+function init(){if(!state.activityTypes||typeof state.activityTypes!=='object')state.activityTypes={};}
+init();
+function typeOf(t){return state.activityTypes[String(t.id)]||t.activityType||'unset'}
+function logType(l){return l.activityType||'unset'}
+// Freeze the category on each NEW completion; old logs remain unchanged/unclassified.
+const previousAddLog=addLog;
+addLog=function(name,cat,xp,mins,job){
+ const old=state.log[0]?.id;
+ const task=state.tasks.find(t=>t.name===name&&(!job||t.job===job));
+ const category=task?typeOf(task):'unset';
+ const result=previousAddLog(name,cat,xp,mins,job);
+ if(state.log[0]&&state.log[0].id!==old&&!isBonus(state.log[0])){state.log[0].activityType=category;save()}
+ refresh();return result;
+};
+// For newly created quests: category selector in the original creation form.
+const form=document.getElementById('form');
+if(form){const holder=document.createElement('div');holder.className='wide';holder.innerHTML='<label for="q1000NewType">活動タイプ</label><select id="q1000NewType"><option value="unset">未分類（後で設定）</option><option value="work">実務・仕事</option><option value="growth">自己成長・未来への投資</option></select>';form.insertBefore(holder,form.lastElementChild);
+ form.addEventListener('submit',()=>{const value=document.getElementById('q1000NewType').value;setTimeout(()=>{const t=state.tasks[state.tasks.length-1];if(t&&value!=='unset'){state.activityTypes[String(t.id)]=value;save();refresh()}},0)});
+}
+// Quest editor: category can be changed without affecting past activity history.
+const editor=document.getElementById('q96TaskKind');
+if(editor){const container=document.createElement('div');container.innerHTML='<label for="q1000EditType">活動タイプ</label><select id="q1000EditType"><option value="unset">未分類</option><option value="work">実務・仕事</option><option value="growth">自己成長・未来への投資</option></select>';editor.parentElement?.after(container);
+ const oldEdit=window.questEditTask;
+ if(typeof oldEdit==='function')window.questEditTask=id=>{oldEdit(id);document.getElementById('q1000EditType').value=typeOf(state.tasks.find(t=>String(t.id)===String(id))||{id})};
+ const ef=document.getElementById('q96TaskForm')||editor.closest('form');
+ // The original quest editor now saves the selected type atomically with the other fields.
+}
+const history=document.getElementById('questStats')||document.getElementById('history')?.closest('section.card');
+if(!history)return;
+const panel=document.createElement('section');panel.className='card';panel.id='q1000Analysis';panel.dataset.questTab='history';history.after(panel);
+let period='month',offset=0;
+function periodBounds(){const n=new Date();let start,end;if(period==='week'){const mon=new Date(n.getFullYear(),n.getMonth(),n.getDate()-((n.getDay()+6)%7)+offset*7);start=mon;end=new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+7)}else if(period==='year'){start=new Date(n.getFullYear()+offset,0,1);end=new Date(n.getFullYear()+offset+1,0,1)}else{start=new Date(n.getFullYear(),n.getMonth()+offset,1);end=new Date(start.getFullYear(),start.getMonth()+1,1)}return {start,end,label:period==='week'?`${day(start)} 〜 ${day(new Date(+end-86400000))}`:period==='year'?`${start.getFullYear()}年`:`${start.getFullYear()}年${start.getMonth()+1}月`}}
+function entries(start,end){return state.log.filter(l=>!isBonus(l)&&!isFocus(l)&&new Date(l.time)>=start&&new Date(l.time)<end)}
+function counts(list){const o={work:0,growth:0,unset:0};list.forEach(l=>o[logType(l)]===undefined?o.unset++:o[logType(l)]++);return o}
+function bar(count){const sum=count.work+count.growth+count.unset;return `<div class="q1000-track">${['work','growth','unset'].map(k=>`<div class="q1000-${k}" style="width:${sum?count[k]/sum*100:0}%" title="${TYPE[k]} ${count[k]}回"></div>`).join('')}</div>`}
+function goals(start,end){const gs=Array.isArray(state.goals)?state.goals:[];const year=String(start.getFullYear()),month=year+'-'+String(start.getMonth()+1).padStart(2,'0');const quarter=year+'-Q'+(Math.floor(start.getMonth()/3)+1);return gs.filter(g=>period==='year'?g.type==='year'&&g.period===year:period==='month'?g.type==='month'&&g.period===month:g.type==='month'&&g.period===month).map(g=>{const m=Array.isArray(g.missions)?g.missions:[];const completed=m.filter(x=>x.done&&(!x.completedAt||new Date(x.completedAt)<end)).length;return {name:g.name,type:g.type,count:m.length,done:completed,pct:m.length?Math.round(completed/m.length*100):0,status:g.status}})}
+function monthSeries(){const y=new Date().getFullYear()+Math.floor(offset/12);return Array.from({length:12},(_,i)=>{const s=new Date(y,i,1),e=new Date(y,i+1,1);return {month:i+1,...counts(entries(s,e))}})}
+function paint(){init();const {start,end,label}=periodBounds();const list=entries(start,end),c=counts(list),classified=c.work+c.growth,all=list.length,growthRate=classified?Math.round(c.growth/classified*100):0;const prevStart=new Date(start),prevEnd=new Date(end);if(period==='week'){prevStart.setDate(prevStart.getDate()-7);prevEnd.setDate(prevEnd.getDate()-7)}else if(period==='year'){prevStart.setFullYear(prevStart.getFullYear()-1);prevEnd.setFullYear(prevEnd.getFullYear()-1)}else{prevStart.setMonth(prevStart.getMonth()-1);prevEnd.setMonth(prevEnd.getMonth()-1)}const prev=counts(entries(prevStart,prevEnd));const gs=goals(start,end),done=gs.reduce((n,g)=>n+g.done,0),goalCount=gs.reduce((n,g)=>n+g.count,0),goalPct=goalCount?Math.round(done/goalCount*100):null;
+ panel.innerHTML=`<h2>📈 人生の成長分析</h2><p class="q1000-muted">達成した習慣とクエストを「実務」「自己成長」で分析。記録回数を集計します。</p><div class="q1000-period"><button type="button" data-period="week" class="${period==='week'?'':'secondary'}">週間</button><button type="button" data-period="month" class="${period==='month'?'':'secondary'}">月間</button><button type="button" data-period="year" class="${period==='year'?'':'secondary'}">年間</button></div><div class="q1000-period" style="margin:10px 0"><button type="button" class="secondary" id="q1000Prev">◀ 前の期間</button><span style="align-self:center">${label}</span><button type="button" class="secondary" id="q1000Next">次の期間 ▶</button></div><div class="q1000-grid"><div class="q1000-stat"><span class="q1000-muted">未来への成長率</span><strong>${classified?growthRate+'%':'—'}</strong><span class="q1000-muted">自己成長 ÷ 分類済み活動</span></div><div class="q1000-stat"><span class="q1000-muted">ゴールへの達成率</span><strong>${goalPct===null?'—':goalPct+'%'}</strong><span class="q1000-muted">対象ボスの実行ミッション</span></div><div class="q1000-stat"><span class="q1000-muted">実務の達成回数</span><strong>${fmt(c.work)}回</strong><span class="q1000-muted">前期 ${fmt(prev.work)}回</span></div><div class="q1000-stat"><span class="q1000-muted">自己成長の達成回数</span><strong>${fmt(c.growth)}回</strong><span class="q1000-muted">前期 ${fmt(prev.growth)}回</span></div></div><h3>活動の割合</h3>${bar(c)}<div class="q1000-legend">${['work','growth','unset'].map(k=>`<span><i class="q1000-dot" style="background:${COLOR[k]}"></i>${TYPE[k]} ${fmt(c[k])}回</span>`).join('')}</div><p class="q1000-muted">未分類 ${c.unset}回は成長率の分母に含めません。過去の記録は自動分類しません。</p><h3>ボスの実行ミッション</h3>${gs.length?gs.map(g=>`<div class="q1000-goal"><b>${escapeHTML(g.name)}</b><div class="q1000-muted">${g.done}/${g.count}件クリア · ${g.pct}%</div><div class="q1000-track"><div class="q1000-growth" style="width:${g.pct}%"></div></div></div>`).join(''):'<p class="q1000-muted">この期間のボスは未登録です。</p>'}<h3>月別の活動推移</h3><div id="q1000MonthGraph"></div><h3>クエスト・習慣の活動タイプ設定</h3><p class="q1000-muted">今後の達成記録に適用します。過去の達成記録は変更しません。</p><div id="q1000TypeSettings"></div><p class="q1000-muted">※ 行動1回を1件として集計。ボス討伐やミッション報酬のXP記録は二重計上しません。目標の進捗は現在の保存状態を参照するため、過去時点の厳密な履歴再現ではありません。</p>`;
+ panel.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{period=b.dataset.period;offset=0;paint()});panel.querySelector('#q1000Prev').onclick=()=>{offset--;paint()};panel.querySelector('#q1000Next').onclick=()=>{offset++;paint()};
+ const graph=panel.querySelector('#q1000MonthGraph'),months=monthSeries(),max=Math.max(1,...months.map(x=>x.work+x.growth+x.unset));graph.innerHTML='<div class="q1000-bars">'+months.map(m=>{const total=m.work+m.growth+m.unset;return `<div class="q1000-month" title="${m.month}月 ${total}回"><div class="q1000-stack">${['work','growth','unset'].map(k=>`<div class="q1000-${k}" style="height:${m[k]/max*88}px;flex-shrink:0"></div>`).join('')}</div><span>${m.month}月</span></div>`}).join('')+'</div>';
+ const settings=panel.querySelector('#q1000TypeSettings');state.tasks.filter(t=>t.cat!=='focus'&&t.job!=='focus').forEach(t=>{const r=document.createElement('div');r.className='q1000-settings';const title=document.createElement('span');title.textContent=t.name;const select=document.createElement('select');Object.entries(TYPE).forEach(([k,v])=>select.add(new Option(v,k)));select.value=typeOf(t);select.onchange=()=>{state.activityTypes[String(t.id)]=select.value;save();paint()};r.append(title,select);settings.append(r)});
+}
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function sync(){panel.classList.toggle('tab-visible',document.querySelector('.rpg-bottom a.active')?.dataset.tab==='history');if(panel.classList.contains('tab-visible'))paint()}
+document.querySelectorAll('.rpg-bottom a').forEach(a=>a.addEventListener('click',sync));
+const oldRender=render;render=function(){oldRender();if(panel.classList.contains('tab-visible'))paint()};
+function refresh(){if(panel.classList.contains('tab-visible'))paint()}
+sync();
+})();
+</script>
+</body></html>
